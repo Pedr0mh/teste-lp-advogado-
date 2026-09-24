@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propostas de Layout | Lopes &amp; Campos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #c3161c; --red-dark: #8f0f13; --red-soft: #fbeaea; --red-light: #ff4a4f;
+    --ink: #1e1e1e; --char: #2b2b2b; --gray: #6e6e6e; --gray-2: #a3a3a3;
+    --line: #e5e5e5; --soft: #f4f4f4;
+    --shadow: 0 10px 30px rgba(0,0,0,.08); --shadow-sm: 0 4px 14px rgba(0,0,0,.08);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: "Poppins", system-ui, sans-serif; color: var(--ink); background: #fff; font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  svg { display: block; }
+  a { color: inherit; }
+  p { margin: 0 0 14px; }
+  h1, h2, h3 { margin: 0; line-height: 1.2; }
+  .container { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+
+  /* ================= SELETOR DE PROPOSTAS (fora do site) ================= */
+  .picker { position: sticky; top: 0; z-index: 100; background: #111; color: #fff; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+  .picker .container { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding-top: 12px; padding-bottom: 12px; }
+  .picker .ttl { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: #aaa; font-weight: 600; }
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tabs button { font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; border: 1.5px solid #444; background: transparent; color: #ddd; border-radius: 999px; padding: 8px 16px; }
+  .tabs button[aria-selected="true"] { background: var(--red); border-color: var(--red); color: #fff; }
+  .picker .desc { flex-basis: 100%; font-size: 13.5px; color: #bbb; margin: 0; line-height: 1.5; }
+  .picker .desc b { color: #fff; }
+  .proposal { display: none; }
+  .proposal.active { display: block; }
+
+  /* ================= COMUNS ================= */
+  .eyebrow { display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--red); margin-bottom: 14px; }
+  h1 strong, h2 strong { color: var(--red); font-weight: inherit; }
+  h2 { font-size: clamp(26px, 3.2vw, 36px); font-weight: 600; letter-spacing: -.01em; }
+  .bar { width: 64px; height: 3px; background: var(--red); border-radius: 3px; margin-top: 18px; }
+  .btn { white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 15px 28px; border-radius: 999px; background: var(--red); color: #fff; font-weight: 600; font-size: 15px; text-decoration: none; border: 0; cursor: pointer; font-family: inherit; box-shadow: 0 8px 20px rgba(195,22,28,.25); transition: background .2s, transform .2s; }
+  .btn:hover { background: var(--red-dark); transform: translateY(-1px); }
+  .btn svg { width: 18px; height: 18px; }
+  .btn.ghost { background: transparent; color: var(--ink); box-shadow: none; border: 1.5px solid var(--line); }
+  .btn.ghost-dark { background: transparent; color: #fff; box-shadow: none; border: 1.5px solid rgba(255,255,255,.35); }
+  .badge { flex: none; width: 60px; height: 60px; border-radius: 50%; background: #fff; box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: center; }
+  .badge svg { width: 26px; height: 26px; stroke: var(--red); fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .secure { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--gray); margin-top: 16px; }
+  .secure svg { width: 16px; height: 16px; stroke: var(--red); fill: none; stroke-width: 2; flex: none; }
+
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo svg { width: 46px; height: 34px; }
+  .logo .name { font-family: "Playfair Display", serif; font-style: italic; font-size: 24px; line-height: 1; white-space: nowrap; }
+  .logo .sub { display: block; font-family: "Poppins", sans-serif; font-style: normal; font-size: 9.5px; letter-spacing: .32em; color: var(--gray); margin-top: 4px; }
+  .nav { display: flex; gap: 30px; font-size: 14.5px; font-weight: 500; }
+  .nav a { text-decoration: none; }
+  .hdr { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 78px; }
+  .hdr .btn { padding: 11px 22px; font-size: 14px; }
+  .hdr .btn .short { display: none; }
+
+  .photo { position: relative; border-radius: 18px; overflow: hidden; background: linear-gradient(160deg, #e9e9e9, #cfcfcf); display: flex; align-items: flex-start; justify-content: center; }
+  .photo .ph-icon { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .photo .ph-icon svg { width: 42%; height: auto; fill: rgba(255,255,255,.55); }
+  .photo .ph-label { position: relative; margin: 18px; background: rgba(255,255,255,.92); border-radius: 10px; padding: 8px 14px; font-size: 13px; color: var(--gray); text-align: center; }
+
+  /* =====================================================================
+     PROPOSTA A · CLÁSSICA CLARA
+     ===================================================================== */
+  .pa .header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96); border-bottom: 1px solid var(--line); }
+  .pa .hero { position: relative; overflow: hidden; padding: 72px 0 88px; background: linear-gradient(180deg, #fff, #f6f6f6); }
+  .pa .hero::before { content: ""; position: absolute; top: 0; right: 0; width: 200px; height: 200px; background: linear-gradient(225deg, var(--red) 0 34%, rgba(150,150,150,.25) 34% 50%, transparent 50%); }
+  .pa .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; position: relative; }
+  .pa h1 { font-size: clamp(32px, 4.6vw, 52px); font-weight: 700; letter-spacing: -.02em; line-height: 1.12; }
+  .pa .lead { font-size: 18px; color: var(--gray); margin: 22px 0 32px; max-width: 580px; }
+  .pa .lead b { color: var(--ink); font-weight: 600; }
+  .pa .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+  .pa .stats { display: flex; flex-wrap: wrap; margin-top: 44px; border-top: 1px solid var(--line); padding-top: 26px; }
+  .pa .stat { padding-right: 28px; margin-right: 28px; border-right: 1px solid var(--line); }
+  .pa .stat:last-child { border: 0; margin: 0; padding: 0; }
+  .pa .stat b { display: block; font-size: 22px; font-weight: 700; color: var(--red); line-height: 1.1; }
+  .pa .stat span { font-size: 13px; color: var(--gray); }
+  .pa .visual { position: relative; }
+  .pa .visual .photo { aspect-ratio: 4 / 5; box-shadow: var(--shadow); }
+  .pa .visual::before { content: ""; position: absolute; left: -22px; top: -22px; width: 110px; height: 110px; background: linear-gradient(135deg, var(--char) 0 50%, transparent 50%); border-radius: 18px 0 0 0; z-index: -1; }
+  .pa .visual::after { content: ""; position: absolute; right: -26px; bottom: -26px; width: 140px; height: 140px; background: linear-gradient(315deg, var(--red) 0 50%, transparent 50%); border-radius: 0 0 18px 0; z-index: -1; }
+  .pa .float-card { position: absolute; left: -34px; bottom: 36px; background: #fff; border-radius: 14px; box-shadow: var(--shadow); padding: 14px 18px; display: flex; gap: 12px; align-items: center; max-width: 250px; }
+  .pa .float-card .badge { width: 44px; height: 44px; box-shadow: none; background: var(--red-soft); }
+  .pa .float-card .badge svg { width: 22px; height: 22px; }
+  .pa .float-card b { display: block; font-size: 14px; line-height: 1.3; }
+  .pa .float-card span { font-size: 12.5px; color: var(--gray); }
+
+  .pa .pains { padding: 96px 0; }
+  .pa .head { text-align: center; max-width: 720px; margin: 0 auto 52px; }
+  .pa .head .bar { margin-left: auto; margin-right: auto; }
+  .pa .head p { color: var(--gray); margin: 16px 0 0; font-size: 17px; }
+  .pa .grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 22px; }
+  .pa .pain { border: 1px solid var(--line); border-radius: 14px; padding: 28px; transition: box-shadow .2s, transform .2s; }
+  .pa .pain:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+  .pa .pain .badge { margin-bottom: 18px; }
+  .pa .pain h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+  .pa .pain p { font-size: 14.5px; color: var(--gray); margin: 0; }
+  .pa .foot { margin-top: 48px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 18px 28px; text-align: center; }
+  .pa .foot p { margin: 0; font-weight: 600; font-size: 17px; }
+
+  /* =====================================================================
+     PROPOSTA B · IMPACTO ESCURO
+     ===================================================================== */
+  .pb .hero { position: relative; overflow: hidden; background: #161616; color: #fff; min-height: 720px; display: flex; flex-direction: column; }
+  .pb .hero .bg { position: absolute; top: 0; right: 0; bottom: 0; width: 52%; background: linear-gradient(160deg, #4a4a4a, #262626); display: flex; align-items: center; justify-content: center; }
+  .pb .hero .bg svg { width: 38%; fill: rgba(255,255,255,.08); }
+  .pb .hero .bg .ph-label { position: absolute; top: 110px; right: 24px; background: rgba(255,255,255,.1); color: #bbb; border-radius: 8px; padding: 6px 12px; font-size: 12.5px; }
+  .pb .hero .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, #161616 0%, rgba(22,22,22,.7) 30%, rgba(22,22,22,0) 70%); }
+  .pb .tri-a { position: absolute; left: 0; bottom: 0; width: 320px; height: 320px; background: linear-gradient(45deg, var(--red) 0 28%, rgba(255,255,255,.08) 28% 42%, transparent 42%); }
+  .pb .tri-b { position: absolute; right: 0; top: 0; width: 260px; height: 260px; background: linear-gradient(225deg, var(--red) 0 30%, rgba(255,255,255,.1) 30% 44%, transparent 44%); z-index: 1; }
+  .pb .header { position: relative; z-index: 5; border-bottom: 1px solid rgba(255,255,255,.1); }
+  .pb .header .logo .name { color: #fff; }
+  .pb .header .logo .sub { color: #aaa; }
+  .pb .header .nav a { color: #ddd; }
+  .pb .hero-body { position: relative; z-index: 2; flex: 1; display: flex; align-items: center; padding: 64px 0 140px; }
+  .pb .hero-text { max-width: 640px; }
+  .pb .eyebrow { color: var(--red-light); }
+  .pb h1 { font-size: clamp(34px, 5vw, 58px); font-weight: 700; line-height: 1.08; letter-spacing: -.02em; }
+  .pb h1 strong { color: var(--red-light); }
+  .pb .lead { font-size: 18px; color: #c8c8c8; margin: 24px 0 34px; max-width: 560px; }
+  .pb .lead b { color: #fff; font-weight: 600; }
+  .pb .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+  .pb .secure { color: #aaa; }
+  .pb .trust-wrap { position: relative; z-index: 3; margin-top: -84px; }
+  .pb .trust { background: #fff; border-radius: 18px; box-shadow: 0 20px 50px rgba(0,0,0,.18); display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .pb .trust > div { display: flex; gap: 16px; align-items: center; padding: 28px; }
+  .pb .trust > div + div { border-left: 1px solid var(--line); }
+  .pb .trust b { display: block; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; font-weight: 500; color: var(--gray); line-height: 1.3; }
+  .pb .trust strong { display: block; font-size: 17px; font-weight: 700; color: var(--ink); text-transform: uppercase; letter-spacing: .02em; line-height: 1.25; }
+
+  .pb .pains { padding: 96px 0; }
+  .pb .pains-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 64px; align-items: start; }
+  .pb .side { position: sticky; top: 100px; }
+  .pb .side p { color: var(--gray); font-size: 17px; margin: 18px 0 28px; }
+  .pb .side .quote { border-left: 4px solid var(--red); padding: 4px 0 4px 18px; font-weight: 600; color: var(--ink); font-size: 16px; margin-bottom: 28px; }
+  .pb .list { border-top: 1px solid var(--line); }
+  .pb .item { display: grid; grid-template-columns: auto auto 1fr; gap: 20px; align-items: center; padding: 22px 4px; border-bottom: 1px solid var(--line); transition: background .2s; }
+  .pb .item:hover { background: #fafafa; }
+  .pb .item .n { font-size: 14px; font-weight: 700; color: var(--gray-2); width: 24px; }
+  .pb .item .badge { width: 54px; height: 54px; }
+  .pb .item .badge svg { width: 24px; height: 24px; }
+  .pb .item h3 { font-size: 17px; font-weight: 600; margin-bottom: 2px; }
+  .pb .item p { margin: 0; font-size: 14.5px; color: var(--gray); }
+
+  /* =====================================================================
+     PROPOSTA C · INTERATIVA
+     ===================================================================== */
+  .pc .topbar { background: var(--ink); color: #cfcfcf; font-size: 13px; }
+  .pc .topbar .container { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 8px; padding-bottom: 8px; }
+  .pc .topbar span { display: inline-flex; align-items: center; gap: 8px; }
+  .pc .topbar svg { width: 15px; height: 15px; }
+  .pc .header { position: sticky; top: 0; z-index: 50; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.05); }
+  .pc .hero { position: relative; overflow: hidden; padding: 72px 0 96px; background: radial-gradient(circle at 85% 20%, #fff 0, #f1f1f1 60%); }
+  .pc .hero::before { content: ""; position: absolute; left: 0; bottom: 0; width: 240px; height: 240px; background: linear-gradient(45deg, var(--red) 0 30%, rgba(150,150,150,.25) 30% 46%, transparent 46%); }
+  .pc .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; position: relative; }
+  .pc h1 { font-size: clamp(32px, 4.4vw, 50px); font-weight: 700; letter-spacing: -.02em; line-height: 1.12; }
+  .pc .lead { font-size: 18px; color: var(--gray); margin: 22px 0 28px; max-width: 560px; }
+  .pc .lead b { color: var(--ink); font-weight: 600; }
+  .pc .lawyer { display: flex; align-items: center; gap: 14px; margin-top: 30px; }
+  .pc .avatars { display: flex; }
+  .pc .avatars span { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(160deg, #dcdcdc, #bdbdbd); border: 3px solid #fff; display: flex; align-items: center; justify-content: center; }
+  .pc .avatars span + span { margin-left: -14px; }
+  .pc .avatars svg { width: 24px; height: 24px; fill: rgba(255,255,255,.8); }
+  .pc .lawyer b { display: block; font-size: 15px; }
+  .pc .lawyer small { font-size: 13px; color: var(--gray); }
+  .pc .quiz { background: #fff; border-radius: 20px; box-shadow: 0 24px 50px rgba(0,0,0,.12); padding: 30px; position: relative; }
+  .pc .quiz::before { content: ""; position: absolute; top: 0; left: 30px; width: 56px; height: 4px; background: var(--red); }
+  .pc .quiz .tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--red); background: var(--red-soft); border-radius: 999px; padding: 4px 12px; margin-bottom: 12px; }
+  .pc .quiz h3 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+  .pc .quiz .sub { color: var(--gray); font-size: 14px; margin-bottom: 18px; }
+  .pc .q { margin-bottom: 18px; }
+  .pc .q .lbl { font-size: 14px; font-weight: 600; margin-bottom: 8px; display: block; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips label { font-size: 13.5px; }
+  .chips input { position: absolute; opacity: 0; pointer-events: none; }
+  .chips span { display: inline-block; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--line); cursor: pointer; transition: all .15s; background: #fff; }
+  .chips input:checked + span { background: var(--red); border-color: var(--red); color: #fff; }
+  .chips input:focus-visible + span { outline: 2px solid var(--red); outline-offset: 2px; }
+  .pc .quiz .btn { width: 100%; }
+
+  .pc .pains { padding: 96px 0; background: #fff; }
+  .pc .head { text-align: center; max-width: 720px; margin: 0 auto 44px; }
+  .pc .head .bar { margin-left: auto; margin-right: auto; }
+  .pc .head p { color: var(--gray); margin: 16px 0 0; font-size: 17px; }
+  .pc .checks { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
+  .pc .check { position: relative; display: flex; gap: 16px; align-items: flex-start; border: 1.5px solid var(--line); border-radius: 14px; padding: 22px; cursor: pointer; transition: border-color .15s, background .15s, box-shadow .15s; }
+  .pc .check input { position: absolute; opacity: 0; pointer-events: none; }
+  .pc .check .box { flex: none; width: 26px; height: 26px; border-radius: 8px; border: 2px solid #cfcfcf; display: flex; align-items: center; justify-content: center; margin-top: 2px; transition: all .15s; }
+  .pc .check .box svg { width: 14px; height: 14px; stroke: #fff; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+  .pc .check h3 { font-size: 16.5px; font-weight: 600; margin-bottom: 4px; }
+  .pc .check p { margin: 0; font-size: 14px; color: var(--gray); }
+  .pc .check:hover { box-shadow: var(--shadow-sm); }
+  .pc .check:has(input:checked) { border-color: var(--red); background: #fff7f7; }
+  .pc .check input:checked ~ .box { background: var(--red); border-color: var(--red); }
+  .pc .check input:checked ~ .box svg { opacity: 1; }
+  .pc .check input:focus-visible ~ .box { outline: 2px solid var(--red); outline-offset: 2px; }
+  .pc .result { margin-top: 30px; background: var(--ink); color: #fff; border-radius: 18px; padding: 24px 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; position: relative; overflow: hidden; }
+  .pc .result::after { content: ""; position: absolute; right: 0; bottom: 0; width: 110px; height: 110px; background: linear-gradient(315deg, var(--red) 0 30%, rgba(255,255,255,.1) 30% 44%, transparent 44%); pointer-events: none; }
+  .pc .result .meter { flex: 1 1 320px; }
+  .pc .result b { font-size: 18px; font-weight: 600; display: block; }
+  .pc .result small { color: #bdbdbd; font-size: 14px; }
+  .pc .track { height: 6px; background: #3a3a3a; border-radius: 6px; margin-top: 12px; overflow: hidden; max-width: 420px; }
+  .pc .track i { display: block; height: 100%; width: 0; background: var(--red); transition: width .3s; }
+  .pc .result .btn { position: relative; z-index: 1; }
+
+  /* ================= RESPONSIVO ================= */
+  @media (max-width: 1000px) {
+    .nav { display: none; }
+    .pa .hero-grid, .pc .hero-grid, .pb .pains-grid { grid-template-columns: 1fr; gap: 44px; }
+    .pa .visual { max-width: 460px; width: 100%; margin: 0 auto; }
+    .pa .grid, .pc .checks { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .pb .hero .bg { width: 100%; opacity: .5; }
+    .pb .side { position: static; }
+  }
+  @media (max-width: 640px) {
+    .hdr { height: 66px; }
+    .logo .name { font-size: 19px; }
+    .logo svg { width: 38px; height: 28px; }
+    .hdr .btn { padding: 10px 16px; font-size: 13px; }
+    .hdr .btn .long, .hdr .btn svg { display: none; }
+    .hdr .btn .short { display: inline; }
+    .ctas .btn, .pb .side .btn, .pa .foot .btn { width: 100%; white-space: normal; text-align: center; }
+    .pa .hero, .pc .hero { padding: 44px 0 64px; }
+    .pa .stats { gap: 16px; }
+    .pa .stat { border: 0; margin: 0; padding: 0; flex: 1 1 40%; }
+    .pa .stat b { font-size: 18px; }
+    .pa .float-card { left: 12px; right: 12px; max-width: none; bottom: 16px; }
+    .pa .visual::before, .pa .visual::after { display: none; }
+    .pa .pains, .pb .pains, .pc .pains { padding: 68px 0; }
+    .pa .grid, .pc .checks { grid-template-columns: 1fr; }
+    .pa .pain { padding: 22px; display: grid; grid-template-columns: auto 1fr; gap: 0 16px; }
+    .pa .pain .badge { width: 52px; height: 52px; margin: 0; grid-row: span 2; }
+    .pa .hero::before, .pc .hero::before { width: 110px; height: 110px; }
+    .pb .hero { min-height: 0; }
+    .pb .hero-body { padding: 44px 0 120px; }
+    .pb .tri-a { width: 150px; height: 150px; }
+    .pb .tri-b { width: 120px; height: 120px; }
+    .pb .hero .bg .ph-label { display: none; }
+    .pb .trust { grid-template-columns: 1fr; }
+    .pb .trust > div { padding: 18px 20px; }
+    .pb .trust > div + div { border-left: 0; border-top: 1px solid var(--line); }
+    .pb .item { grid-template-columns: auto 1fr; gap: 16px; }
+    .pb .item .n { display: none; }
+    .pc .topbar .container { justify-content: center; }
+    .pc .topbar .hide-m { display: none; }
+    .pc .quiz { padding: 24px 20px; }
+    .pc .result { padding: 22px 20px; }
+    .pc .result .btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-money" viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="10" rx="1.5"/><circle cx="9" cy="11" r="2.2"/><circle cx="17.5" cy="16.5" r="4.5" fill="#fff"/><path d="M17.5 14.5v2l1.4 1.2"/></symbol>
+  <symbol id="i-safe" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="15" rx="2"/><circle cx="12" cy="11.5" r="3.5"/><path d="M12 8v1M12 14v1M15.5 11.5h-1M9.5 11.5h-1M6 19v2M18 19v2"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v10H9l-5 4z"/><path d="M12 8v3M12 13h.01"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></symbol>
+  <symbol id="i-helmet" viewBox="0 0 24 24"><path d="M4 16a8 8 0 0 1 16 0M2 16h20v2H2zM10 8V5h4v3"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M7 21h10M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+  <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M12 22s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z" fill="#c3161c"/><circle cx="12" cy="10" r="2.6" fill="#fff"/></symbol>
+  <symbol id="logo-mark" viewBox="0 0 46 34">
+    <path d="M0 4h14L7 20z" fill="#b9b9b9"/><path d="M7 20L14 4l7 16z" fill="#d7d7d7"/>
+    <path d="M14 4h14l-7 16z" fill="#c3161c"/><path d="M21 20l7-16 7 16z" fill="#8f0f13"/>
+    <path d="M28 4h14l-7 16z" fill="#3a3a3a"/><path d="M14 20h14l-7 14z" fill="#c3161c"/><path d="M28 20h7l-7 10z" fill="#5a5a5a"/>
+  </symbol>
+</svg>
+
+<!-- ================= SELETOR ================= -->
+<div class="picker">
+  <div class="container">
+    <span class="ttl">Escolha a proposta</span>
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-p="a">A · Clássica clara</button>
+      <button role="tab" aria-selected="false" data-p="b">B · Impacto escuro</button>
+      <button role="tab" aria-selected="false" data-p="c">C · Interativa</button>
+    </div>
+    <p class="desc" id="desc"></p>
+  </div>
+</div>
+
+<!-- =====================================================================
+     PROPOSTA A
+     ===================================================================== -->
+<div class="proposal pa active" id="pa" data-desc="<b>Clássica clara.</b> Fundo branco, foto dos advogados em destaque ao lado do título e números de confiança logo abaixo. As situações aparecem em cartões com ícones. É a mais próxima dos materiais atuais do escritório.">
+  <header class="header"><div class="container hdr">
+    <a class="logo" href="#"><svg><use href="#logo-mark"/></svg><span class="name">Lopes &amp; Campos<span class="sub">ADVOCACIA</span></span></a>
+    <nav class="nav"><a href="#">Seus direitos</a><a href="#">Como funciona</a><a href="#">O escritório</a><a href="#">Dúvidas</a></nav>
+    <a class="btn" href="#"><span class="long">Fale com um advogado</span><span class="short">Falar agora</span><svg><use href="#i-arrow"/></svg></a>
+  </div></header>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">Direito Trabalhista · Rescisão Indireta</span>
+        <h1>A empresa descumpre o contrato e <strong>você</strong> é quem tem que pedir demissão?</h1>
+        <p class="lead">Salário atrasado, FGTS sem depósito, assédio, horas extras que nunca aparecem no holerite. Quando a falta é da empresa, a lei permite que <b>você encerre o contrato e saia com os mesmos direitos de uma demissão sem justa causa.</b></p>
+        <div class="ctas"><a class="btn" href="#">Quero analisar o meu caso <svg><use href="#i-arrow"/></svg></a><a class="btn ghost" href="#">Entenda seus direitos</a></div>
+        <div class="secure"><svg><use href="#i-lock"/></svg>Atendimento sigiloso. Sua empresa não fica sabendo do contato.</div>
+        <div class="stats">
+          <div class="stat"><b>+15 anos</b><span>de atuação jurídica</span></div>
+          <div class="stat"><b>Planaltina-DF</b><span>e atendimento online</span></div>
+          <div class="stat"><b>OAB/DF</b><span>[número de inscrição]</span></div>
+        </div>
+      </div>
+      <div class="visual">
+        <div class="photo" style="aspect-ratio:4/5"><div class="ph-icon"><svg viewBox="0 0 24 24"><use href="#i-person"/></svg></div><div class="ph-label">Foto dos advogados</div></div>
+        <div class="float-card"><span class="badge"><svg><use href="#i-scale"/></svg></span><div><b>Art. 483 da CLT</b><span>A lei que garante a rescisão indireta</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pains">
+    <div class="container">
+      <div class="head">
+        <span class="eyebrow">Você se reconhece?</span>
+        <h2>Se isso é a sua rotina, você pode ter direito à <strong>rescisão indireta</strong></h2>
+        <div class="bar"></div>
+        <p>Não é "coisa de todo emprego". São faltas graves da empresa, previstas no artigo 483 da CLT.</p>
+      </div>
+      <div class="grid">
+        <article class="pain"><span class="badge"><svg><use href="#i-money"/></svg></span><h3>Salário atrasado</h3><p>Todo mês a mesma incerteza sobre quando o pagamento vai cair.</p></article>
+        <article class="pain"><span class="badge"><svg><use href="#i-safe"/></svg></span><h3>FGTS não depositado</h3><p>Você consulta o extrato e os depósitos simplesmente não estão lá.</p></article>
+        <article class="pain"><span class="badge"><svg><use href="#i-chat"/></svg></span><h3>Assédio ou humilhação</h3><p>Gritos, ameaças, exposição na frente da equipe, metas usadas como punição.</p></article>
+        <article class="pain"><span class="badge"><svg><use href="#i-clock"/></svg></span><h3>Horas extras sem pagamento</h3><p>Jornada estendida virou regra, mas não aparece no holerite.</p></article>
+        <article class="pain"><span class="badge"><svg><use href="#i-swap"/></svg></span><h3>Desvio de função</h3><p>Você faz o trabalho de outro cargo (ou de dois) e recebe pelo seu.</p></article>
+        <article class="pain"><span class="badge"><svg><use href="#i-helmet"/></svg></span><h3>Ambiente inseguro</h3><p>Falta de EPI ou risco à saúde que a empresa ignora.</p></article>
+      </div>
+      <div class="foot"><p>Você não precisa aceitar isso calado, nem sair de mãos vazias.</p><a class="btn" href="#">Quero saber se meu caso se encaixa</a></div>
+    </div>
+  </section>
+</div>
+
+<!-- =====================================================================
+     PROPOSTA B
+     ===================================================================== -->
+<div class="proposal pb" id="pb" data-desc="<b>Impacto escuro.</b> Primeira tela escura e marcante, com a foto ao fundo e os triângulos vermelhos grandes da marca. Uma faixa branca com os selos de confiança fica sobreposta. As situações aparecem em lista numerada, com o título fixo ao lado. É a mais forte e emocional.">
+  <section class="hero">
+    <div class="bg"><svg viewBox="0 0 24 24"><use href="#i-person"/></svg><span class="ph-label">Foto dos advogados (fundo)</span></div>
+    <div class="tri-a"></div><div class="tri-b"></div>
+    <header class="header"><div class="container hdr">
+      <a class="logo" href="#"><svg><use href="#logo-mark"/></svg><span class="name">Lopes &amp; Campos<span class="sub">ADVOCACIA</span></span></a>
+      <nav class="nav"><a href="#">Seus direitos</a><a href="#">Como funciona</a><a href="#">O escritório</a><a href="#">Dúvidas</a></nav>
+      <a class="btn" href="#"><span class="long">Fale com um advogado</span><span class="short">Falar agora</span><svg><use href="#i-arrow"/></svg></a>
+    </div></header>
+    <div class="hero-body"><div class="container"><div class="hero-text">
+      <span class="eyebrow">Direito Trabalhista · Rescisão Indireta</span>
+      <h1>A culpa é da empresa. <strong>Por que você sairia perdendo?</strong></h1>
+      <p class="lead">Salário atrasado, FGTS sem depósito, assédio, horas extras sem pagamento. Quando a falta é da empresa, a lei permite que <b>você encerre o contrato e saia com os mesmos direitos de uma demissão sem justa causa.</b></p>
+      <div class="ctas"><a class="btn" href="#">Quero analisar o meu caso <svg><use href="#i-arrow"/></svg></a><a class="btn ghost-dark" href="#">Entenda seus direitos</a></div>
+      <div class="secure"><svg><use href="#i-lock"/></svg>Atendimento sigiloso. Sua empresa não fica sabendo do contato.</div>
+    </div></div></div>
+  </section>
+  <div class="trust-wrap"><div class="container"><div class="trust">
+    <div><span class="badge"><svg><use href="#i-award"/></svg></span><div><b>Há mais de</b><strong>15 anos</strong></div></div>
+    <div><span class="badge"><svg><use href="#i-scale"/></svg></span><div><b>Direito</b><strong>Trabalhista</strong></div></div>
+    <div><span class="badge"><svg><use href="#i-map"/></svg></span><div><b>Planaltina-DF</b><strong>e online</strong></div></div>
+  </div></div></div>
+
+  <section class="pains">
+    <div class="container pains-grid">
+      <div class="side">
+        <span class="eyebrow">Você se reconhece?</span>
+        <h2>Se isso é a sua rotina, você pode ter direito à <strong>rescisão indireta</strong></h2>
+        <div class="bar"></div>
+        <p>Não é "coisa de todo emprego". São faltas graves da empresa, previstas no artigo 483 da CLT.</p>
+        <div class="quote">Você não precisa aceitar isso calado, nem sair de mãos vazias.</div>
+        <a class="btn" href="#">Quero saber se meu caso se encaixa</a>
+      </div>
+      <div class="list">
+        <div class="item"><span class="n">01</span><span class="badge"><svg><use href="#i-money"/></svg></span><div><h3>Salário atrasado</h3><p>Todo mês a mesma incerteza sobre quando o pagamento vai cair.</p></div></div>
+        <div class="item"><span class="n">02</span><span class="badge"><svg><use href="#i-safe"/></svg></span><div><h3>FGTS não depositado</h3><p>Você consulta o extrato e os depósitos simplesmente não estão lá.</p></div></div>
+        <div class="item"><span class="n">03</span><span class="badge"><svg><use href="#i-chat"/></svg></span><div><h3>Assédio ou humilhação</h3><p>Gritos, ameaças, exposição na frente da equipe, metas usadas como punição.</p></div></div>
+        <div class="item"><span class="n">04</span><span class="badge"><svg><use href="#i-clock"/></svg></span><div><h3>Horas extras sem pagamento</h3><p>Jornada estendida virou regra, mas não aparece no holerite.</p></div></div>
+        <div class="item"><span class="n">05</span><span class="badge"><svg><use href="#i-swap"/></svg></span><div><h3>Desvio de função</h3><p>Você faz o trabalho de outro cargo (ou de dois) e recebe pelo seu.</p></div></div>
+        <div class="item"><span class="n">06</span><span class="badge"><svg><use href="#i-helmet"/></svg></span><div><h3>Ambiente inseguro</h3><p>Falta de EPI ou risco à saúde que a empresa ignora.</p></div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- =====================================================================
+     PROPOSTA C
+     ===================================================================== -->
+<div class="proposal pc" id="pc" data-desc="<b>Interativa.</b> Faixa superior com endereço e telefone. Na primeira tela, no lugar da foto grande, um cartão de perguntas rápidas que o visitante responde clicando. Na segunda, ele marca as situações que vive e vê o resultado na hora. É a que mais engaja e qualifica o contato.">
+  <div class="topbar"><div class="container">
+    <span><svg><use href="#i-pin"/></svg>Av. Independência, qd. 34, lt. 8, sala 06, Planaltina-DF</span>
+    <span class="hide-m"><svg style="color:#ff6a6e"><use href="#i-phone"/></svg>Atendimento presencial e online</span>
+  </div></div>
+  <header class="header"><div class="container hdr">
+    <a class="logo" href="#"><svg><use href="#logo-mark"/></svg><span class="name">Lopes &amp; Campos<span class="sub">ADVOCACIA</span></span></a>
+    <nav class="nav"><a href="#">Seus direitos</a><a href="#">Como funciona</a><a href="#">O escritório</a><a href="#">Dúvidas</a></nav>
+    <a class="btn" href="#"><span class="long">Fale com um advogado</span><span class="short">Falar agora</span><svg><use href="#i-arrow"/></svg></a>
+  </div></header>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">Direito Trabalhista · Rescisão Indireta</span>
+        <h1>A empresa descumpre o contrato e <strong>você</strong> é quem tem que pedir demissão?</h1>
+        <p class="lead">Quando a falta é da empresa, a lei permite que <b>você encerre o contrato e saia com os mesmos direitos de uma demissão sem justa causa.</b> Isso se chama rescisão indireta.</p>
+        <div class="secure"><svg><use href="#i-lock"/></svg>Atendimento sigiloso. Sua empresa não fica sabendo do contato.</div>
+        <div class="lawyer">
+          <div class="avatars"><span><svg viewBox="0 0 24 24"><use href="#i-person"/></svg></span><span><svg viewBox="0 0 24 24"><use href="#i-person"/></svg></span></div>
+          <div><b>Lopes &amp; Campos Advocacia</b><small>Há mais de 15 anos · OAB/DF [número]</small></div>
+        </div>
+      </div>
+      <form class="quiz" onsubmit="event.preventDefault(); document.getElementById('pc-pains').scrollIntoView({behavior:'smooth'});">
+        <span class="tag"><svg width="12" height="12"><use href="#i-clock" style="stroke:currentColor;fill:none;stroke-width:2.4"/></svg>Leva 30 segundos</span>
+        <h3>Seu caso pode ser rescisão indireta?</h3>
+        <p class="sub">Responda e descubra o próximo passo.</p>
+        <div class="q"><span class="lbl">Você tem carteira assinada?</span>
+          <div class="chips"><label><input type="radio" name="c1"><span>Sim</span></label><label><input type="radio" name="c1"><span>Não</span></label><label><input type="radio" name="c1"><span>Parte é "por fora"</span></label></div>
+        </div>
+        <div class="q"><span class="lbl">Você ainda trabalha na empresa?</span>
+          <div class="chips"><label><input type="radio" name="c2"><span>Sim</span></label><label><input type="radio" name="c2"><span>Saí há menos de 2 anos</span></label></div>
+        </div>
+        <div class="q"><span class="lbl">O que está acontecendo?</span>
+          <div class="chips"><label><input type="checkbox"><span>Salário atrasado</span></label><label><input type="checkbox"><span>FGTS</span></label><label><input type="checkbox"><span>Assédio</span></label><label><input type="checkbox"><span>Horas extras</span></label><label><input type="checkbox"><span>Outro</span></label></div>
+        </div>
+        <button class="btn" type="submit">Ver se meu caso se encaixa <svg><use href="#i-arrow"/></svg></button>
+      </form>
+    </div>
+  </section>
+
+  <section class="pains" id="pc-pains">
+    <div class="container">
+      <div class="head">
+        <span class="eyebrow">Você se reconhece?</span>
+        <h2>Marque o que <strong>acontece com você</strong></h2>
+        <div class="bar"></div>
+        <p>Estas são faltas graves da empresa, previstas no artigo 483 da CLT. Se uma delas faz parte da sua rotina, você pode ter direito à rescisão indireta.</p>
+      </div>
+      <div class="checks" id="checks">
+        <label class="check"><input type="checkbox"><span class="box"><svg><use href="#i-check"/></svg></span><div><h3>Salário atrasado</h3><p>Todo mês a mesma incerteza sobre quando o pagamento vai cair.</p></div></label>
+        <label class="check"><input type="checkbox"><span class="box"><svg><use href="#i-check"/></svg></span><div><h3>FGTS não depositado</h3><p>Você consulta o extrato e os depósitos não estão lá.</p></div></label>
+        <label class="check"><input type="checkbox"><span class="box"><svg><use href="#i-check"/></svg></span><div><h3>Assédio ou humilhação</h3><p>Gritos, ameaças, exposição na frente da equipe.</p></div></label>
+        <label class="check"><input type="checkbox"><span class="box"><svg><use href="#i-check"/></svg></span><div><h3>Horas extras sem pagamento</h3><p>Jornada estendida virou regra, mas não aparece no holerite.</p></div></label>
+        <label class="check"><input type="checkbox"><span class="box"><svg><use href="#i-check"/></svg></span><div><h3>Desvio de função</h3><p>Você faz o trabalho de outro cargo e recebe pelo seu.</p></div></label>
+        <label class="check"><input type="checkbox"><span class="box"><svg><use href="#i-check"/></svg></span><div><h3>Ambiente inseguro</h3><p>Falta de EPI ou risco à saúde que a empresa ignora.</p></div></label>
+      </div>
+      <div class="result">
+        <div class="meter"><b id="res-t">Marque as situações que você vive</b><small id="res-s">Nenhuma situação marcada ainda.</small><div class="track"><i id="res-bar"></i></div></div>
+        <a class="btn" href="#">Quero analisar o meu caso <svg><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Troca de proposta
+  var tabs = document.querySelectorAll('.tabs button');
+  var desc = document.getElementById('desc');
+  function show(p) {
+    tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.p === p ? 'true' : 'false'); });
+    document.querySelectorAll('.proposal').forEach(function (el) { el.classList.toggle('active', el.id === 'p' + p); });
+    desc.innerHTML = document.getElementById('p' + p).dataset.desc;
+    try { history.replaceState(null, '', '#' + p); } catch (e) {}
+    window.scrollTo(0, 0);
+  }
+  tabs.forEach(function (t) { t.addEventListener('click', function () { show(t.dataset.p); }); });
+  var start = (location.hash || '').replace('#', '');
+  show(['a', 'b', 'c'].indexOf(start) > -1 ? start : 'a');
+
+  // Proposta C: contador das situações marcadas
+  var boxes = document.querySelectorAll('#checks input');
+  function update() {
+    var n = Array.prototype.filter.call(boxes, function (b) { return b.checked; }).length;
+    document.getElementById('res-bar').style.width = (n / boxes.length * 100) + '%';
+    document.getElementById('res-t').textContent = n === 0 ? 'Marque as situações que você vive' : 'Você marcou ' + n + (n === 1 ? ' situação' : ' situações');
+    document.getElementById('res-s').textContent = n === 0 ? 'Nenhuma situação marcada ainda.' : 'Isso pode caracterizar rescisão indireta. Vale conversar com um advogado.';
+  }
+  boxes.forEach(function (b) { b.addEventListener('change', update); });
+</script>
+</body>
+</html>
