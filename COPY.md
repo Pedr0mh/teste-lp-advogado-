@@ -6,6 +6,8 @@
 >
 > **Tom de voz:** firme, acolhedor e técnico na medida certa. Fala de igual para igual, sem juridiquês e sem promessas. Segue o Código de Ética da OAB e o Provimento 205/2021 (publicidade informativa, sem garantia de resultado, sem valores, sem captação agressiva).
 >
+> A numeração dos blocos é a mesma do `wireframe.html`, onde estão o layout e os elementos (imagens, gráficos, ícones) de cada seção.
+>
 > Campos entre `[colchetes]` devem ser preenchidos com os dados reais do escritório.
 
 ---
@@ -82,7 +84,17 @@ Você não precisa aceitar isso calado, e também não precisa sair de mãos vaz
 
 ---
 
-## 04. O que é rescisão indireta
+## 04. Faixa de virada (bloco só de copy)
+
+**Frase de impacto:**
+Pedir demissão é exatamente o que a empresa espera que você faça.
+
+**Apoio:**
+Assim ela não paga o aviso prévio, não libera o seu FGTS e não arca com a multa de 40%. Quando a culpa é da empresa, a conta também deve ser dela.
+
+---
+
+## 05. O que é rescisão indireta
 
 **Título (H2):**
 Rescisão indireta é a "justa causa" aplicada pelo trabalhador contra a empresa
@@ -95,12 +107,20 @@ Na prática, o contrato se encerra como se você tivesse sido **demitido sem jus
 **Destaque (caixa lateral):**
 Previsão legal: Artigo 483 da Consolidação das Leis do Trabalho (CLT).
 
+**Infográfico GRF-01 (linha do tempo do prazo):**
+Atenção ao prazo: você tem até 2 anos após o fim do contrato para entrar com a ação e pode cobrar valores dos últimos 5 anos trabalhados.
+Rótulos: "Últimos 5 anos: valores que podem ser cobrados" | "Fim do contrato" | "2 anos para entrar com a ação"
+
 ---
 
-## 05. Comparativo: pedir demissão x rescisão indireta
+## 06. Comparativo: pedir demissão x rescisão indireta
 
 **Título (H2):**
 Pedir demissão pode custar caro. Veja a diferença.
+
+**Gráfico GRF-02 (barras):**
+Título: Direitos que você leva na saída
+Rótulos: Pedido de demissão: 3 de 7 | Rescisão indireta: 7 de 7
 
 **Subtítulo:**
 Muita gente pede as contas para se livrar do problema e deixa para trás direitos importantes.
@@ -122,7 +142,7 @@ Além das verbas rescisórias, também podem ser cobrados valores que a empresa 
 
 ---
 
-## 06. Seus direitos (resumo visual)
+## 07. Seus direitos (resumo visual)
 
 **Título (H2):**
 O que você pode receber com a rescisão indireta
@@ -136,12 +156,17 @@ O que você pode receber com a rescisão indireta
 - Valores atrasados ou nunca pagos durante o contrato
 - Indenização por danos morais, quando houver assédio ou humilhação comprovados
 
+**Gráfico GRF-03 (barra empilhada do FGTS):**
+Título: Como fica o seu FGTS
+Rótulos: Pedido de demissão: saldo retido | Rescisão indireta: saque do saldo + 40% de multa
+Legenda: Na rescisão indireta você saca o saldo e recebe a multa de 40%. No pedido de demissão, o saldo fica retido.
+
 **Observação:**
 Cada caso é analisado individualmente. Os direitos dependem dos fatos e das provas disponíveis.
 
 ---
 
-## 07. Como funciona (etapas)
+## 08. Como funciona (etapas)
 
 **Título (H2):**
 Como funciona, do primeiro contato até a decisão
@@ -165,7 +190,7 @@ Como funciona, do primeiro contato até a decisão
 
 ---
 
-## 08. Para quem é (qualificação)
+## 09. Para quem é (qualificação)
 
 **Título (H2):**
 Este atendimento é para você se...
@@ -183,7 +208,7 @@ Este atendimento é para você se...
 
 ---
 
-## 09. Provas: o que separar
+## 10. Provas: o que separar
 
 **Título (H2):**
 Organize isto antes da nossa conversa
@@ -205,7 +230,7 @@ Não peça demissão, não assine documentos e não faça acordos antes de conve
 
 ---
 
-## 10. Sobre o escritório / advogado
+## 11. Sobre o escritório / advogado
 
 **Título (H2):**
 Quem vai cuidar do seu caso
@@ -224,7 +249,7 @@ Nosso trabalho começa ouvindo. Depois, explicamos o que a lei diz sobre a sua s
 
 ---
 
-## 11. Diferenciais de atendimento
+## 12. Diferenciais de atendimento
 
 **Título (H2):**
 Um processo trabalhista não precisa ser um peso a mais na sua vida
@@ -236,7 +261,7 @@ Um processo trabalhista não precisa ser um peso a mais na sua vida
 
 ---
 
-## 12. Dúvidas frequentes (FAQ)
+## 13. Dúvidas frequentes (FAQ)
 
 **Título (H2):**
 Perguntas que recebemos todos os dias
@@ -267,7 +292,7 @@ Sim. O atendimento é online e os processos trabalhistas tramitam de forma eletr
 
 ---
 
-## 13. CTA final + formulário qualificador
+## 14. CTA final + formulário qualificador
 
 **Título (H2):**
 Você não precisa decidir sozinho
@@ -295,7 +320,7 @@ Seus dados são tratados com sigilo. Retornamos em até [X] horas úteis.
 
 ---
 
-## 14. Rodapé
+## 15. Rodapé
 
 - [Nome do Escritório] Advocacia Trabalhista
 - [Nome do advogado(a)] | OAB/[UF] [número]

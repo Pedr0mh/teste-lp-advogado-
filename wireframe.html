@@ -6,436 +6,709 @@
 <title>Wireframe Rescisão Indireta</title>
 <style>
   :root {
-    --bg: #f4f4f2;
+    --bg: #eeeeeb;
     --paper: #ffffff;
+    --soft: #f7f7f5;
     --ink: #1f1f1f;
     --muted: #6b6b6b;
-    --line: #c9c9c5;
-    --fill: #e6e6e2;
-    --fill-2: #d6d6d1;
+    --line: #c4c4bf;
+    --fill: #e4e4e0;
+    --fill-2: #cfcfca;
     --accent: #3a3a3a;
-    --tag: #fff3c4;
+
+    /* cores das etiquetas por tipo de elemento */
+    --t-copy: #2f5d8a;   --t-copy-bg: #e3edf7;
+    --t-img: #2f7a4a;    --t-img-bg: #e1f2e7;
+    --t-chart: #6b3fa0;  --t-chart-bg: #efe6f8;
+    --t-ico: #a8561b;    --t-ico-bg: #fbeadd;
+    --t-btn: #262626;    --t-btn-bg: #e2e2e2;
+    --t-form: #1d7373;   --t-form-bg: #dcf1f1;
+    --t-tab: #7a5a1d;    --t-tab-bg: #f5ecd8;
+    --t-ui: #555555;     --t-ui-bg: #ececec;
   }
   * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  }
-  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
-  .intro { padding: 32px 0 8px; }
-  .intro h1 { margin: 0 0 4px; font-size: 22px; }
-  .intro p { margin: 0; color: var(--muted); }
-  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; font-size: 13px; color: var(--muted); }
-  .legend span { display: inline-flex; align-items: center; gap: 6px; }
-  .sw { width: 14px; height: 14px; border: 1px solid var(--line); display: inline-block; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 16px 120px; }
 
-  .block {
-    position: relative;
-    background: var(--paper);
-    border: 1.5px dashed var(--line);
-    border-radius: 6px;
-    margin: 28px 0;
-    padding: 44px 32px 32px;
-  }
-  .block.alt { background: #fafaf8; }
-  .block.dark { background: #2b2b2b; color: #f1f1f1; border-color: #555; }
-  .block.dark .muted { color: #bdbdbd; }
-  .label {
-    position: absolute; top: -12px; left: 16px;
-    background: var(--tag); border: 1px solid #d8c56a;
-    padding: 2px 10px; border-radius: 4px;
-    font: 600 12px/1.6 ui-monospace, Menlo, monospace; color: #5a4a00;
-  }
-  .note {
-    margin-top: 20px; padding: 10px 12px;
-    border-left: 3px solid #d8c56a; background: #fffbe8;
-    font-size: 13px; color: #5a4a00;
-  }
-  .block.dark .note { background: #3a3522; color: #f3e6a8; }
+  /* ---------- cabeçalho do documento ---------- */
+  .doc { padding: 32px 0 8px; }
+  .doc h1 { margin: 0 0 4px; font-size: 24px; }
+  .doc p { margin: 0 0 12px; color: var(--muted); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+  .map { margin-top: 20px; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+  .map h2 { font-size: 15px; margin: 0 0 10px; }
+  .map ol { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px 18px; font-size: 13px; }
+  .map li { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; padding: 4px 0; border-bottom: 1px dotted var(--line); }
+  .map li b { min-width: 22px; }
+  .map a { color: var(--ink); text-decoration: none; }
+
+  /* ---------- etiquetas ---------- */
+  .tag { display: inline-block; font: 700 10.5px/1 ui-monospace, Menlo, monospace; letter-spacing: .04em; text-transform: uppercase; padding: 4px 7px; border-radius: 3px; border: 1px solid currentColor; white-space: nowrap; }
+  .t-copy { color: var(--t-copy); background: var(--t-copy-bg); }
+  .t-img { color: var(--t-img); background: var(--t-img-bg); }
+  .t-chart { color: var(--t-chart); background: var(--t-chart-bg); }
+  .t-ico { color: var(--t-ico); background: var(--t-ico-bg); }
+  .t-btn { color: var(--t-btn); background: var(--t-btn-bg); }
+  .t-form { color: var(--t-form); background: var(--t-form-bg); }
+  .t-tab { color: var(--t-tab); background: var(--t-tab-bg); }
+  .t-ui { color: var(--t-ui); background: var(--t-ui-bg); }
+
+  /* ---------- bloco ---------- */
+  .block { background: var(--paper); border: 1.5px solid var(--line); border-radius: 8px; margin: 28px 0; overflow: hidden; }
+  .bhead { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 12px 18px; background: var(--fill); border-bottom: 1.5px solid var(--line); }
+  .bhead .num { font: 700 13px/1 ui-monospace, Menlo, monospace; background: var(--ink); color: #fff; padding: 5px 8px; border-radius: 3px; }
+  .bhead .name { font-weight: 700; }
+  .bhead .types { display: flex; flex-wrap: wrap; gap: 5px; margin-left: auto; }
+  .spec { padding: 8px 18px; font: 12px/1.5 ui-monospace, Menlo, monospace; color: var(--muted); border-bottom: 1px dashed var(--line); background: var(--soft); }
+  .spec b { color: var(--ink); font-weight: 600; }
+  .bbody { padding: 28px 24px; }
+  .bbody.dark { background: #2b2b2b; color: #eee; }
+  .bbody.tint { background: var(--soft); }
+  .note { margin: 0 24px 20px; padding: 10px 12px; border-left: 3px solid #c9a93a; background: #fff8dc; font-size: 13px; color: #5a4a00; }
+
+  /* ---------- elementos ---------- */
+  .el { position: relative; border: 1.5px dashed var(--line); border-radius: 6px; padding: 30px 16px 16px; }
+  .el > .tag { position: absolute; top: 8px; left: 8px; }
+  .el.copy { border-color: #9fb9d4; }
+  .el.img { border-color: #9fcaa9; }
+  .el.chart { border-color: #c2a8df; }
+  .el.form { border-color: #93c9c9; }
+  .el.tab { border-color: #d7c095; }
+  .el.ico { border-color: #e2b690; }
+  .dark .el { border-color: #666; }
+  .dark .el.copy { border-color: #6f8fb0; }
+  .dark .el.form { border-color: #5fa3a3; }
+
+  .ph { background: var(--fill); border: 1px solid var(--line); border-radius: 4px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; min-height: 200px; }
+  .ph svg.x { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .ph .cap { position: relative; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; padding: 8px 12px; font-size: 12.5px; text-align: center; max-width: 85%; }
+  .ph .cap b { display: block; font-size: 13px; }
+  .asset { font: 11.5px/1.5 ui-monospace, Menlo, monospace; color: var(--muted); margin-top: 8px; }
+  .dark .asset { color: #aaa; }
+
+  .icon { width: 40px; height: 40px; border-radius: 50%; border: 1.5px dashed var(--t-ico); background: var(--t-ico-bg); display: flex; align-items: center; justify-content: center; font: 700 9px/1 ui-monospace, Menlo, monospace; color: var(--t-ico); flex: none; margin-bottom: 10px; }
 
   h2 { font-size: 26px; line-height: 1.25; margin: 0 0 10px; }
   h3 { font-size: 16px; margin: 0 0 4px; }
-  p { margin: 0 0 12px; }
+  p { margin: 0 0 10px; }
   .muted { color: var(--muted); }
+  .dark .muted { color: #bdbdbd; }
+  .small { font-size: 13px; }
   .eyebrow { font: 600 12px/1 ui-monospace, Menlo, monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 12px; }
   .center { text-align: center; }
-  .center .lead { max-width: 720px; margin-left: auto; margin-right: auto; }
+  .mx { max-width: 760px; margin-left: auto; margin-right: auto; }
 
-  .btn {
-    display: inline-block; padding: 12px 22px; border-radius: 6px;
-    background: var(--accent); color: #fff; font-weight: 600; font-size: 14px;
-    text-decoration: none; border: 0;
-  }
-  .btn.ghost { background: transparent; color: var(--ink); text-decoration: underline; padding-left: 4px; }
-  .block.dark .btn { background: #f1f1f1; color: #1f1f1f; }
-  .ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 18px 0 8px; }
-
-  .img {
-    background: var(--fill);
-    background-image: linear-gradient(45deg, transparent 49.5%, var(--fill-2) 49.5%, var(--fill-2) 50.5%, transparent 50.5%),
-                      linear-gradient(-45deg, transparent 49.5%, var(--fill-2) 49.5%, var(--fill-2) 50.5%, transparent 50.5%);
-    border: 1px solid var(--line); border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--muted); font-size: 13px; min-height: 180px; text-align: center; padding: 12px;
-  }
-  .ico { width: 36px; height: 36px; border-radius: 50%; background: var(--fill-2); margin-bottom: 10px; flex: none; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 6px; background: var(--accent); color: #fff; font-weight: 600; font-size: 14px; text-decoration: none; }
+  .btn.line { background: transparent; color: var(--ink); border: 1.5px solid var(--accent); }
+  .dark .btn { background: #f1f1f1; color: #1f1f1f; }
+  .btnrow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 
   .grid { display: grid; gap: 16px; }
-  .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .hero { grid-template-columns: 1.3fr 1fr; align-items: center; gap: 32px; }
-  .card { border: 1px solid var(--line); border-radius: 6px; padding: 16px; background: var(--paper); }
-  .card p { margin: 0; font-size: 14px; color: var(--muted); }
+  .g2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .g3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .g4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
+  .g5 { grid-template-columns: repeat(5, minmax(0,1fr)); }
+  .g64 { grid-template-columns: 1.5fr 1fr; }
+  .g46 { grid-template-columns: 1fr 1.5fr; }
+  .gap-l { gap: 28px; }
+  .stack > * + * { margin-top: 16px; }
+  .card { border: 1px solid var(--line); border-radius: 6px; padding: 14px; background: var(--paper); }
+  .card p { margin: 0; font-size: 13.5px; color: var(--muted); }
 
-  /* header */
-  .hdr { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  .logo { width: 180px; height: 36px; background: var(--fill); border: 1px solid var(--line); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--muted); }
-  .nav { display: flex; gap: 18px; font-size: 14px; color: var(--muted); flex-wrap: wrap; }
+  .hdr { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .logo { width: 170px; height: 40px; }
+  .logo.ph { min-height: 0; }
+  .nav { display: flex; gap: 16px; font-size: 14px; flex-wrap: wrap; }
 
-  .seals { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 22px; font-size: 13px; color: var(--muted); }
-  .seals span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--fill-2); margin-right: 6px; vertical-align: -1px; }
+  .seals { display: flex; flex-wrap: wrap; gap: 10px; }
+  .seal { display: flex; align-items: center; gap: 8px; font-size: 13px; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px 4px 4px; }
+  .seal .icon { width: 26px; height: 26px; margin: 0; font-size: 7px; }
+
+  .manifesto { font-size: 30px; line-height: 1.3; font-weight: 700; margin: 0 0 14px; }
 
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th, td { border-bottom: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top; }
+  th, td { border-bottom: 1px solid var(--line); padding: 9px 10px; text-align: left; vertical-align: top; }
   th { background: var(--fill); font-size: 13px; }
   td.no { color: var(--muted); }
   td.yes { font-weight: 600; }
-  .table-scroll { overflow-x: auto; }
-
-  .steps { counter-reset: s; }
-  .step { counter-increment: s; }
-  .step::before { content: counter(s); display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; margin-bottom: 10px; }
+  .scroll-x { overflow-x: auto; }
 
   ul.check { list-style: none; padding: 0; margin: 0; }
-  ul.check li { padding: 6px 0 6px 26px; position: relative; border-bottom: 1px dotted var(--line); }
-  ul.check li::before { content: ""; position: absolute; left: 0; top: 10px; width: 14px; height: 14px; border: 1.5px solid var(--accent); border-radius: 3px; }
-  ul.x li::before { border-radius: 50%; border-color: var(--muted); }
+  ul.check li { padding: 7px 0 7px 26px; position: relative; border-bottom: 1px dotted var(--line); font-size: 14px; }
+  ul.check li::before { content: ""; position: absolute; left: 0; top: 11px; width: 14px; height: 14px; border: 1.5px solid var(--accent); border-radius: 3px; }
+  ul.check.x li::before { border-radius: 50%; border-color: var(--muted); }
 
-  .alert { border: 2px solid var(--accent); border-radius: 6px; padding: 16px; font-weight: 600; }
+  .alert { border: 2px solid var(--accent); border-radius: 6px; padding: 14px; font-weight: 600; font-size: 14px; }
 
-  details { border-bottom: 1px solid var(--line); padding: 14px 0; }
+  details { border-bottom: 1px solid var(--line); padding: 12px 0; }
   summary { cursor: pointer; font-weight: 600; }
-  details p { margin: 8px 0 0; color: var(--muted); }
+  details p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
 
-  .form { display: grid; gap: 12px; }
+  .form { display: grid; gap: 10px; }
   .field { height: 42px; border: 1px solid #777; border-radius: 4px; background: #3a3a3a; display: flex; align-items: center; padding: 0 12px; font-size: 13px; color: #cfcfcf; }
-  .field.tall { height: 90px; align-items: flex-start; padding-top: 10px; }
+  .field.tall { height: 84px; align-items: flex-start; padding-top: 10px; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip { border: 1px solid #777; border-radius: 999px; padding: 4px 10px; font-size: 12px; color: #dcdcdc; }
-  .flabel { font-size: 12px; color: #bdbdbd; margin-bottom: -6px; }
+  .flabel { font-size: 12px; color: #bdbdbd; margin-bottom: -4px; }
 
-  .float {
-    position: fixed; right: 18px; bottom: 18px; z-index: 10;
-    display: flex; align-items: center; gap: 10px;
-  }
+  svg.chart { width: 100%; height: auto; display: block; }
+  svg.chart text { font-family: system-ui, sans-serif; }
+
+  .assets table td:first-child { font: 600 12px ui-monospace, Menlo, monospace; white-space: nowrap; }
+
+  .float { position: fixed; right: 18px; bottom: 18px; z-index: 10; display: flex; align-items: center; gap: 10px; }
   .float .bubble { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: 13px; max-width: 220px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
-  .float .wa { width: 56px; height: 56px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
-
-  footer.block { font-size: 13px; }
+  .float .wa { width: 58px; height: 58px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font: 700 10px/1.1 ui-monospace, Menlo, monospace; text-align: center; }
 
   @media (max-width: 860px) {
-    .hero, .g2, .g3, .g4 { grid-template-columns: 1fr !important; }
-    .block { padding: 40px 18px 24px; }
+    .g2, .g3, .g4, .g5, .g64, .g46 { grid-template-columns: 1fr; }
+    .map ol { grid-template-columns: 1fr; }
+    .bbody { padding: 22px 14px; }
+    .note { margin: 0 14px 16px; }
     h2 { font-size: 22px; }
+    .manifesto { font-size: 23px; }
     .nav { display: none; }
+    .bhead .types { margin-left: 0; }
     .float .bubble { display: none; }
   }
 </style>
 </head>
 <body>
 
+<!-- SVG reutilizável: X de placeholder de imagem -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="x" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <line x1="0" y1="0" x2="100" y2="100" stroke="#c4c4bf" stroke-width="0.6" vector-effect="non-scaling-stroke"/>
+    <line x1="100" y1="0" x2="0" y2="100" stroke="#c4c4bf" stroke-width="0.6" vector-effect="non-scaling-stroke"/>
+  </symbol>
+</svg>
+
 <div class="wrap">
-  <div class="intro">
+
+  <!-- ================= DOCUMENTO ================= -->
+  <div class="doc">
     <h1>Wireframe | Landing page Rescisão Indireta</h1>
-    <p>Estrutura de baixa fidelidade com a copy final. Cada bloco numerado corresponde a uma seção do arquivo COPY.md.</p>
+    <p>Estrutura de baixa fidelidade com a copy final. Cada bloco mostra o layout, os elementos que o compõem e o que vai em cada espaço. Os textos completos estão no arquivo COPY.md, com a mesma numeração.</p>
     <div class="legend">
-      <span><i class="sw" style="background:var(--tag)"></i> Nome do bloco</span>
-      <span><i class="sw" style="background:#fffbe8"></i> Nota de layout / comportamento</span>
-      <span><i class="sw" style="background:var(--fill)"></i> Imagem ou ícone</span>
-      <span><i class="sw" style="background:var(--accent)"></i> Botão / CTA</span>
+      <span class="tag t-copy">Copy</span>
+      <span class="tag t-img">Imagem</span>
+      <span class="tag t-chart">Gráfico / infográfico</span>
+      <span class="tag t-ico">Ícone</span>
+      <span class="tag t-btn">Botão / CTA</span>
+      <span class="tag t-tab">Tabela</span>
+      <span class="tag t-form">Formulário</span>
+      <span class="tag t-ui">Componente de interface</span>
     </div>
+
+    <nav class="map">
+      <h2>Mapa da página</h2>
+      <ol>
+        <li><b>01</b><a href="#b01">Header fixo</a> <span class="tag t-img">logo</span><span class="tag t-btn">cta</span></li>
+        <li><b>02</b><a href="#b02">Hero</a> <span class="tag t-copy">copy</span><span class="tag t-img">imagem</span></li>
+        <li><b>03</b><a href="#b03">Você se reconhece?</a> <span class="tag t-ico">ícones</span><span class="tag t-copy">copy</span></li>
+        <li><b>04</b><a href="#b04">Faixa de virada</a> <span class="tag t-copy">só copy</span></li>
+        <li><b>05</b><a href="#b05">O que é + prazo</a> <span class="tag t-copy">copy</span><span class="tag t-chart">infográfico</span></li>
+        <li><b>06</b><a href="#b06">Comparativo</a> <span class="tag t-chart">gráfico</span><span class="tag t-tab">tabela</span></li>
+        <li><b>07</b><a href="#b07">Seus direitos</a> <span class="tag t-ico">ícones</span><span class="tag t-chart">gráfico</span></li>
+        <li><b>08</b><a href="#b08">Como funciona</a> <span class="tag t-chart">linha do tempo</span></li>
+        <li><b>09</b><a href="#b09">Para quem é</a> <span class="tag t-copy">só copy</span></li>
+        <li><b>10</b><a href="#b10">Provas</a> <span class="tag t-copy">copy</span><span class="tag t-img">imagem</span></li>
+        <li><b>11</b><a href="#b11">Sobre o advogado</a> <span class="tag t-img">foto</span><span class="tag t-copy">copy</span></li>
+        <li><b>12</b><a href="#b12">Diferenciais</a> <span class="tag t-ico">ícones</span></li>
+        <li><b>13</b><a href="#b13">Dúvidas frequentes</a> <span class="tag t-ui">acordeão</span></li>
+        <li><b>14</b><a href="#b14">CTA final</a> <span class="tag t-form">formulário</span></li>
+        <li><b>15</b><a href="#b15">Rodapé</a> <span class="tag t-copy">copy</span></li>
+        <li><b>+</b>WhatsApp flutuante <span class="tag t-ui">fixo</span></li>
+      </ol>
+    </nav>
   </div>
 
-  <!-- 01 HEADER -->
-  <header class="block" style="padding-top:32px">
-    <div class="label">01 · Header fixo</div>
-    <div class="hdr">
-      <div class="logo">LOGO [Nome do Escritório]</div>
-      <nav class="nav"><span>O que é</span><span>Seus direitos</span><span>Como funciona</span><span>Sobre</span><span>Dúvidas</span></nav>
-      <a class="btn" href="#cta">Falar com um advogado</a>
+  <!-- ================= 01 HEADER ================= -->
+  <section class="block" id="b01">
+    <div class="bhead"><span class="num">01</span><span class="name">Header fixo</span>
+      <span class="types"><span class="tag t-img">Logo</span><span class="tag t-ui">Menu</span><span class="tag t-btn">Botão</span></span></div>
+    <div class="spec"><b>Layout:</b> 1 linha, 3 zonas (logo | menu | botão) · <b>Fundo:</b> branco com sombra ao rolar · <b>Altura:</b> 72px desktop / 60px mobile</div>
+    <div class="bbody">
+      <div class="hdr">
+        <div class="ph logo"><svg class="x"><use href="#x"/></svg><span class="tag t-img" style="position:relative">LOGO · IMG-00</span></div>
+        <nav class="nav muted"><span>O que é</span><span>Seus direitos</span><span>Como funciona</span><span>Sobre</span><span>Dúvidas</span></nav>
+        <a class="btn" href="#b14">Falar com um advogado</a>
+      </div>
     </div>
-    <div class="note">Fixo no topo ao rolar. No mobile, menu vira ícone hambúrguer e o botão permanece visível.</div>
-  </header>
+    <div class="note">Menu com âncoras para os blocos 05, 07, 08, 11 e 13. No mobile: logo + botão reduzido "Falar agora" + ícone de menu.</div>
+  </section>
 
-  <!-- 02 HERO -->
-  <section class="block">
-    <div class="label">02 · Hero</div>
-    <div class="grid hero">
-      <div>
-        <div class="eyebrow">Direito do Trabalho | Rescisão Indireta</div>
-        <h2 style="font-size:34px">A empresa descumpre o contrato e você é quem tem que pedir demissão?</h2>
-        <p class="muted">Salário atrasado, FGTS sem depósito, humilhação, horas extras que nunca aparecem no holerite. Quando a falta é da empresa, a lei permite que <strong>você encerre o contrato e saia com os mesmos direitos de uma demissão sem justa causa.</strong> Isso se chama rescisão indireta.</p>
-        <div class="ctas">
-          <a class="btn" href="#cta">Quero analisar o meu caso</a>
-          <a class="btn ghost" href="#oque">Entenda o que é rescisão indireta</a>
+  <!-- ================= 02 HERO ================= -->
+  <section class="block" id="b02">
+    <div class="bhead"><span class="num">02</span><span class="name">Hero (primeira dobra)</span>
+      <span class="types"><span class="tag t-copy">Copy</span><span class="tag t-img">Imagem</span><span class="tag t-btn">2 botões</span><span class="tag t-ico">Selos</span></span></div>
+    <div class="spec"><b>Layout:</b> 2 colunas 60/40 (copy | imagem) · <b>Fundo:</b> claro · <b>Altura:</b> 100vh desktop · <b>Mobile:</b> copy em cima, imagem embaixo</div>
+    <div class="bbody">
+      <div class="grid g64 gap-l" style="align-items:center">
+        <div class="stack">
+          <div class="el copy"><span class="tag t-copy">Copy · tag + H1 + subtítulo</span>
+            <div class="eyebrow">Direito do Trabalho | Rescisão Indireta</div>
+            <h2 style="font-size:32px">A empresa descumpre o contrato e você é quem tem que pedir demissão?</h2>
+            <p class="muted">Salário atrasado, FGTS sem depósito, humilhação, horas extras que nunca aparecem no holerite. Quando a falta é da empresa, a lei permite que <strong>você encerre o contrato e saia com os mesmos direitos de uma demissão sem justa causa.</strong> Isso se chama rescisão indireta.</p>
+          </div>
+          <div class="el"><span class="tag t-btn">Botões + microcopy</span>
+            <div class="btnrow"><a class="btn" href="#b14">Quero analisar o meu caso</a><a class="btn line" href="#b05">Entenda o que é rescisão indireta</a></div>
+            <p class="muted small" style="margin:10px 0 0">Atendimento sigiloso. Sua empresa não fica sabendo do contato.</p>
+          </div>
+          <div class="el ico"><span class="tag t-ico">Selos · ícone + texto curto</span>
+            <div class="seals">
+              <span class="seal"><span class="icon">ICO</span>Atuação exclusiva em Direito do Trabalho</span>
+              <span class="seal"><span class="icon">ICO</span>Atendimento online em todo o Brasil</span>
+              <span class="seal"><span class="icon">ICO</span>OAB/[UF] [número]</span>
+            </div>
+          </div>
         </div>
-        <p class="muted" style="font-size:13px">Atendimento sigiloso. Sua empresa não fica sabendo do contato.</p>
-        <div class="seals">
-          <span>Atuação exclusiva em Direito do Trabalho</span>
-          <span>Atendimento online em todo o Brasil</span>
-          <span>OAB/[UF] [número]</span>
-        </div>
-      </div>
-      <div class="img" style="min-height:360px">Foto do advogado(a)<br>ou imagem de trabalhador em contexto real<br>(evitar martelo e balança)</div>
-    </div>
-    <div class="note">Primeira dobra: título + subtítulo + CTA precisam aparecer sem rolagem. No mobile, a imagem vai para baixo do texto ou vira fundo com sobreposição escura.</div>
-  </section>
-
-  <!-- 03 IDENTIFICAÇÃO -->
-  <section class="block alt">
-    <div class="label">03 · Você se reconhece? (dores)</div>
-    <div class="center">
-      <h2>Se alguma dessas situações é a sua rotina, você pode ter direito à rescisão indireta</h2>
-      <p class="muted lead">Não é "coisa de todo emprego". São faltas graves previstas no artigo 483 da CLT.</p>
-    </div>
-    <div class="grid g4" style="margin-top:20px">
-      <div class="card"><div class="ico"></div><h3>Salário atrasado com frequência</h3><p>Todo mês a mesma incerteza sobre quando o pagamento vai cair.</p></div>
-      <div class="card"><div class="ico"></div><h3>FGTS não depositado</h3><p>Você consulta o extrato e os depósitos simplesmente não estão lá.</p></div>
-      <div class="card"><div class="ico"></div><h3>Assédio moral ou humilhação</h3><p>Gritos, ameaças, exposição na frente da equipe, metas impossíveis usadas como punição.</p></div>
-      <div class="card"><div class="ico"></div><h3>Horas extras sem pagamento</h3><p>Jornada estendida virou regra, mas não aparece no holerite.</p></div>
-      <div class="card"><div class="ico"></div><h3>Desvio ou acúmulo de função</h3><p>Você faz o trabalho de outro cargo (ou de dois) e recebe pelo seu.</p></div>
-      <div class="card"><div class="ico"></div><h3>Ambiente inseguro</h3><p>Falta de EPI, risco à saúde ou à integridade que a empresa ignora.</p></div>
-      <div class="card"><div class="ico"></div><h3>Redução de salário ou de comissões</h3><p>Mudanças unilaterais que diminuem o que você recebe.</p></div>
-      <div class="card"><div class="ico"></div><h3>Trabalho sem registro correto</h3><p>Parte do salário "por fora", carteira com data ou valor errado.</p></div>
-    </div>
-    <div class="center" style="margin-top:24px">
-      <p><strong>Você não precisa aceitar isso calado, e também não precisa sair de mãos vazias.</strong></p>
-      <a class="btn" href="#cta">Quero saber se o meu caso se encaixa</a>
-    </div>
-    <div class="note">Grid 4x2 no desktop, 1 coluna no mobile (ou carrossel horizontal). Ícones de linha simples.</div>
-  </section>
-
-  <!-- 04 O QUE É -->
-  <section class="block" id="oque">
-    <div class="label">04 · O que é rescisão indireta</div>
-    <div class="grid g2" style="grid-template-columns:1.5fr 1fr; gap:32px">
-      <div>
-        <h2>Rescisão indireta é a "justa causa" aplicada pelo trabalhador contra a empresa</h2>
-        <p class="muted">Quando o funcionário comete uma falta grave, a empresa pode demiti-lo por justa causa. A lei também funciona no sentido contrário: quando é a <strong>empresa</strong> que descumpre suas obrigações de forma grave, o trabalhador pode pedir na Justiça do Trabalho o fim do contrato por culpa do empregador.</p>
-        <p class="muted">Na prática, o contrato se encerra como se você tivesse sido <strong>demitido sem justa causa</strong>. A diferença é que quem deu motivo foi a empresa.</p>
-      </div>
-      <div class="card" style="align-self:center; border-width:2px">
-        <div class="eyebrow">Previsão legal</div>
-        <h3 style="font-size:20px">Artigo 483 da CLT</h3>
-        <p>Consolidação das Leis do Trabalho</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 05 COMPARATIVO -->
-  <section class="block alt">
-    <div class="label">05 · Comparativo: pedir demissão x rescisão indireta</div>
-    <div class="center">
-      <h2>Pedir demissão pode custar caro. Veja a diferença.</h2>
-      <p class="muted lead">Muita gente pede as contas para se livrar do problema e deixa para trás direitos importantes.</p>
-    </div>
-    <div class="table-scroll" style="margin-top:16px">
-      <table>
-        <thead><tr><th>Direito</th><th>Pedido de demissão</th><th>Rescisão indireta</th></tr></thead>
-        <tbody>
-          <tr><td>Saldo de salário</td><td>Sim</td><td class="yes">Sim</td></tr>
-          <tr><td>13º salário proporcional</td><td>Sim</td><td class="yes">Sim</td></tr>
-          <tr><td>Férias vencidas e proporcionais + 1/3</td><td>Sim</td><td class="yes">Sim</td></tr>
-          <tr><td>Aviso prévio indenizado</td><td class="no">Não (e pode ter que cumprir ou ter descontado)</td><td class="yes">Sim</td></tr>
-          <tr><td>Saque do FGTS</td><td class="no">Não</td><td class="yes">Sim</td></tr>
-          <tr><td>Multa de 40% sobre o FGTS</td><td class="no">Não</td><td class="yes">Sim</td></tr>
-          <tr><td>Seguro-desemprego</td><td class="no">Não</td><td class="yes">Sim, se cumpridos os requisitos</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="muted" style="font-size:13px; margin-top:12px">Além das verbas rescisórias, também podem ser cobrados valores que a empresa deixou de pagar durante o contrato, como horas extras, diferenças salariais e depósitos de FGTS em atraso, conforme o caso.</p>
-    <div class="center"><a class="btn" href="#cta">Antes de pedir demissão, fale com um advogado</a></div>
-    <div class="note">Bloco de maior peso persuasivo. Coluna "Rescisão indireta" destacada com cor de marca. No mobile, transformar em 2 cards empilhados ou manter tabela com rolagem lateral.</div>
-  </section>
-
-  <!-- 06 DIREITOS -->
-  <section class="block">
-    <div class="label">06 · Seus direitos (resumo visual)</div>
-    <h2 class="center">O que você pode receber com a rescisão indireta</h2>
-    <div class="grid g3" style="margin-top:18px">
-      <div class="card"><div class="ico"></div><h3>Aviso prévio indenizado</h3></div>
-      <div class="card"><div class="ico"></div><h3>Saque integral do FGTS</h3></div>
-      <div class="card"><div class="ico"></div><h3>Multa de 40% sobre o FGTS</h3></div>
-      <div class="card"><div class="ico"></div><h3>Seguro-desemprego</h3><p>Quando preenchidos os requisitos</p></div>
-      <div class="card"><div class="ico"></div><h3>13º e férias proporcionais + 1/3</h3></div>
-      <div class="card"><div class="ico"></div><h3>Valores atrasados ou nunca pagos</h3><p>Horas extras, diferenças salariais, FGTS em atraso</p></div>
-    </div>
-    <div class="card" style="margin-top:16px"><div style="display:flex; gap:12px; align-items:center"><div class="ico" style="margin:0"></div><div><h3>Indenização por danos morais</h3><p>Quando houver assédio ou humilhação comprovados</p></div></div></div>
-    <p class="muted center" style="font-size:13px; margin-top:14px">Cada caso é analisado individualmente. Os direitos dependem dos fatos e das provas disponíveis.</p>
-  </section>
-
-  <!-- 07 COMO FUNCIONA -->
-  <section class="block alt">
-    <div class="label">07 · Como funciona (etapas)</div>
-    <h2 class="center">Como funciona, do primeiro contato até a decisão</h2>
-    <div class="grid g4 steps" style="grid-template-columns:repeat(5,minmax(0,1fr)); margin-top:20px">
-      <div class="card step"><h3>Conversa inicial</h3><p>Você conta o que está acontecendo, com sigilo. Entendemos o contexto e o tempo de empresa.</p></div>
-      <div class="card step"><h3>Análise do caso e das provas</h3><p>Avaliamos documentos, mensagens, holerites e extrato do FGTS.</p></div>
-      <div class="card step"><h3>Estratégia</h3><p>Explicamos os caminhos, os riscos e se é melhor continuar trabalhando ou se afastar.</p></div>
-      <div class="card step"><h3>Ação na Justiça do Trabalho</h3><p>Ajuizamos a ação pedindo a rescisão indireta e as verbas devidas.</p></div>
-      <div class="card step"><h3>Acompanhamento até o fim</h3><p>Você é informado de cada etapa: audiências, prazos e acordos.</p></div>
-    </div>
-    <div class="center" style="margin-top:20px"><a class="btn" href="#cta">Começar pela conversa inicial</a></div>
-    <div class="note">Linha do tempo horizontal no desktop (5 colunas com conector). No mobile, vertical com linha lateral.</div>
-  </section>
-
-  <!-- 08 PARA QUEM É -->
-  <section class="block">
-    <div class="label">08 · Para quem é (filtro de qualificação)</div>
-    <h2 class="center">Este atendimento é para você se...</h2>
-    <div class="grid g2" style="margin-top:18px">
-      <div class="card" style="border-width:2px; border-color:var(--accent)">
-        <h3 style="margin-bottom:10px">É para você</h3>
-        <ul class="check">
-          <li>Você trabalha (ou trabalhou até há pouco tempo) com carteira assinada.</li>
-          <li>A empresa descumpre obrigações de forma repetida, não foi um erro isolado.</li>
-          <li>Você quer sair, mas não quer abrir mão do que é seu por direito.</li>
-          <li>Você tem ou consegue reunir registros do problema (mensagens, e-mails, holerites, extrato do FGTS, testemunhas).</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3 style="margin-bottom:10px" class="muted">Talvez não seja o caminho</h3>
-        <ul class="check x muted">
-          <li>Você quer apenas trocar de emprego e não há falta grave da empresa.</li>
-          <li>O problema aconteceu uma única vez e já foi resolvido.</li>
-          <li>Você trabalha como PJ ou autônomo sem vínculo (pode haver outra discussão, como o reconhecimento de vínculo. Fale conosco para avaliar.)</li>
-        </ul>
-      </div>
-    </div>
-    <div class="note">Bloco estratégico para qualificar o lead: afasta curiosos e reforça autoridade. Coluna da esquerda com destaque visual.</div>
-  </section>
-
-  <!-- 09 PROVAS -->
-  <section class="block alt">
-    <div class="label">09 · Provas: o que separar</div>
-    <div class="grid g2" style="gap:32px">
-      <div>
-        <h2>Organize isto antes da nossa conversa</h2>
-        <p class="muted">Quanto mais registros, mais segura é a análise. Não se preocupe se não tiver tudo.</p>
-        <div class="alert" style="margin-top:18px">Não peça demissão, não assine documentos e não faça acordos antes de conversar com um advogado. Uma decisão precipitada pode dificultar o reconhecimento dos seus direitos.</div>
-      </div>
-      <ul class="check">
-        <li>Carteira de trabalho (física ou digital)</li>
-        <li>Últimos holerites</li>
-        <li>Extrato do FGTS (aplicativo FGTS)</li>
-        <li>Prints de conversas, e-mails e mensagens com gestores</li>
-        <li>Registros de ponto ou anotações da sua jornada</li>
-        <li>Nome de colegas que presenciaram os fatos</li>
-        <li>Atestados médicos, se houve impacto na sua saúde</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- 10 SOBRE -->
-  <section class="block">
-    <div class="label">10 · Sobre o escritório / advogado</div>
-    <div class="grid g2" style="grid-template-columns:1fr 1.4fr; gap:32px; align-items:center">
-      <div class="img" style="min-height:340px">Foto profissional<br>do advogado(a) ou equipe</div>
-      <div>
-        <div class="eyebrow">Quem vai cuidar do seu caso</div>
-        <h2>[Nome do advogado(a)]</h2>
-        <p class="muted" style="font-size:13px">OAB/[UF] [número]</p>
-        <p class="muted">Advogado(a) trabalhista com atuação dedicada à defesa de trabalhadores. [X] anos acompanhando pessoas que chegaram ao limite com a empresa e precisavam de uma saída segura.</p>
-        <p class="muted">Nosso trabalho começa ouvindo. Depois, explicamos o que a lei diz sobre a sua situação, com honestidade sobre as possibilidades e os riscos, para que você tome a decisão com informação, e não no impulso.</p>
-        <div class="grid g3" style="margin-top:14px">
-          <div class="card"><h3>Atuação focada</h3><p>Direito do Trabalho para o trabalhador.</p></div>
-          <div class="card"><h3>Transparência</h3><p>Você sabe em que fase está o seu processo.</p></div>
-          <div class="card"><h3>Atendimento humano</h3><p>Sem robôs, sem fila.</p></div>
+        <div class="el img"><span class="tag t-img">Imagem · IMG-01</span>
+          <div class="ph" style="min-height:420px"><svg class="x"><use href="#x"/></svg>
+            <div class="cap"><b>Foto do advogado(a)</b>ou trabalhador(a) em ambiente real de trabalho, expressão séria e confiante</div></div>
+          <div class="asset">Proporção 4:5 · mín. 1000x1250px · WebP · evitar martelo, balança e bancos de imagem genéricos</div>
         </div>
       </div>
     </div>
+    <div class="note">Título, subtítulo e botão principal precisam aparecer sem rolar a página, inclusive no celular.</div>
   </section>
 
-  <!-- 11 DIFERENCIAIS -->
-  <section class="block dark">
-    <div class="label">11 · Diferenciais de atendimento</div>
-    <h2 class="center">Um processo trabalhista não precisa ser um peso a mais na sua vida</h2>
-    <div class="grid g4" style="margin-top:20px">
-      <div><div class="ico" style="background:#555"></div><h3>Sigilo total</h3><p class="muted">Sua empresa não é comunicada sobre o contato com o escritório.</p></div>
-      <div><div class="ico" style="background:#555"></div><h3>100% online</h3><p class="muted">Reuniões por vídeo e assinatura digital, de qualquer cidade.</p></div>
-      <div><div class="ico" style="background:#555"></div><h3>Linguagem clara</h3><p class="muted">Explicamos cada passo sem juridiquês.</p></div>
-      <div><div class="ico" style="background:#555"></div><h3>Contato direto</h3><p class="muted">Canal de WhatsApp para acompanhar o andamento.</p></div>
-    </div>
-    <div class="note">Faixa de contraste (fundo escuro) para quebrar o ritmo visual antes do FAQ.</div>
-  </section>
-
-  <!-- 12 FAQ -->
-  <section class="block">
-    <div class="label">12 · Dúvidas frequentes (acordeão)</div>
-    <h2 class="center">Perguntas que recebemos todos os dias</h2>
-    <div style="max-width:820px; margin:16px auto 0">
-      <details open><summary>Preciso continuar trabalhando enquanto o processo corre?</summary><p>Depende da situação. Em algumas hipóteses previstas na lei, é possível continuar trabalhando até a decisão. Em outras, especialmente quando há risco à saúde ou assédio, pode ser recomendado se afastar. Essa decisão deve ser tomada com orientação jurídica.</p></details>
-      <details><summary>A empresa vai saber que procurei um advogado?</summary><p>Não. A conversa com o escritório é sigilosa. A empresa só toma conhecimento quando a ação é ajuizada.</p></details>
-      <details><summary>Posso ser demitido por justa causa por entrar com a ação?</summary><p>Entrar com uma ação trabalhista é um direito e não é motivo para justa causa. Se houver retaliação, isso também pode ser levado ao processo.</p></details>
-      <details><summary>E se o juiz não reconhecer a rescisão indireta?</summary><p>Existe esse risco, e por isso a análise prévia das provas é tão importante. Se a rescisão indireta não for reconhecida, o contrato pode ser considerado encerrado a pedido do trabalhador. Explicamos esse cenário com clareza antes de qualquer decisão.</p></details>
-      <details><summary>Quanto tempo demora?</summary><p>O prazo varia conforme a região e a complexidade do caso. Em muitas situações, a primeira audiência já abre espaço para acordo.</p></details>
-      <details><summary>Já saí da empresa. Ainda posso cobrar meus direitos?</summary><p>Sim. Você tem até 2 anos após o fim do contrato para entrar com a ação, podendo cobrar valores dos últimos 5 anos. Se você pediu demissão por causa das faltas da empresa, vale conversar para avaliar o caso.</p></details>
-      <details><summary>Como funcionam os honorários?</summary><p>As condições são explicadas com transparência na primeira conversa, antes de qualquer contratação.</p></details>
-      <details><summary>Não moro na mesma cidade do escritório. Posso ser atendido?</summary><p>Sim. O atendimento é online e os processos trabalhistas tramitam de forma eletrônica.</p></details>
-    </div>
-    <div class="note">Usar marcação schema.org FAQPage para SEO.</div>
-  </section>
-
-  <!-- 13 CTA FINAL + FORM -->
-  <section class="block dark" id="cta">
-    <div class="label">13 · CTA final + formulário qualificador</div>
-    <div class="grid g2" style="gap:36px">
-      <div>
-        <h2 style="font-size:30px">Você não precisa decidir sozinho</h2>
-        <p class="muted">Conte o que está acontecendo. Vamos analisar a sua situação e dizer, com honestidade, se a rescisão indireta é o melhor caminho para você.</p>
-        <p class="muted" style="margin-top:24px">Prefere conversar agora?</p>
-        <a class="btn" href="#">Chamar no WhatsApp</a>
+  <!-- ================= 03 DORES ================= -->
+  <section class="block" id="b03">
+    <div class="bhead"><span class="num">03</span><span class="name">Você se reconhece? (dores)</span>
+      <span class="types"><span class="tag t-copy">Copy</span><span class="tag t-ico">8 ícones</span><span class="tag t-btn">Botão</span></span></div>
+    <div class="spec"><b>Layout:</b> título centralizado + grid 4x2 de cards · <b>Fundo:</b> cinza claro · <b>Mobile:</b> 1 coluna ou carrossel horizontal</div>
+    <div class="bbody tint">
+      <div class="el copy center"><span class="tag t-copy">Copy · H2 + subtítulo</span>
+        <h2 class="mx">Se alguma dessas situações é a sua rotina, você pode ter direito à rescisão indireta</h2>
+        <p class="muted mx">Não é "coisa de todo emprego". São faltas graves previstas no artigo 483 da CLT.</p>
       </div>
-      <div class="form">
-        <div class="field">Nome</div>
-        <div class="grid g2" style="gap:12px"><div class="field">WhatsApp</div><div class="field">Cidade / Estado</div></div>
-        <div class="flabel">Você tem carteira assinada?</div>
-        <div class="chips"><span class="chip">Sim</span><span class="chip">Não</span><span class="chip">Tenho, mas parte é "por fora"</span></div>
-        <div class="flabel">Situação atual</div>
-        <div class="chips"><span class="chip">Ainda trabalho na empresa</span><span class="chip">Saí há menos de 2 anos</span><span class="chip">Saí há mais de 2 anos</span></div>
-        <div class="flabel">Tempo de empresa</div>
-        <div class="chips"><span class="chip">Menos de 1 ano</span><span class="chip">1 a 3 anos</span><span class="chip">3 a 5 anos</span><span class="chip">Mais de 5 anos</span></div>
-        <div class="flabel">Principal problema (pode marcar mais de um)</div>
-        <div class="chips"><span class="chip">Salário atrasado</span><span class="chip">FGTS não depositado</span><span class="chip">Assédio moral</span><span class="chip">Horas extras</span><span class="chip">Desvio de função</span><span class="chip">Ambiente inseguro</span><span class="chip">Outro</span></div>
-        <div class="field tall">Conte brevemente o que está acontecendo (opcional)</div>
-        <div style="font-size:12px; color:#bdbdbd">[ ] Concordo com o uso dos meus dados para retorno do contato, conforme a Política de Privacidade.</div>
-        <a class="btn" href="#" style="text-align:center">Enviar para análise</a>
-        <div style="font-size:12px; color:#bdbdbd">Seus dados são tratados com sigilo. Retornamos em até [X] horas úteis.</div>
+      <div class="el ico" style="margin-top:16px"><span class="tag t-ico">Cards · ícone de linha + título + 1 linha de apoio</span>
+        <div class="grid g4">
+          <div class="card"><div class="icon">ICO</div><h3>Salário atrasado com frequência</h3><p>Todo mês a mesma incerteza sobre quando o pagamento vai cair.</p></div>
+          <div class="card"><div class="icon">ICO</div><h3>FGTS não depositado</h3><p>Você consulta o extrato e os depósitos simplesmente não estão lá.</p></div>
+          <div class="card"><div class="icon">ICO</div><h3>Assédio moral ou humilhação</h3><p>Gritos, ameaças, exposição na frente da equipe, metas impossíveis usadas como punição.</p></div>
+          <div class="card"><div class="icon">ICO</div><h3>Horas extras sem pagamento</h3><p>Jornada estendida virou regra, mas não aparece no holerite.</p></div>
+          <div class="card"><div class="icon">ICO</div><h3>Desvio ou acúmulo de função</h3><p>Você faz o trabalho de outro cargo (ou de dois) e recebe pelo seu.</p></div>
+          <div class="card"><div class="icon">ICO</div><h3>Ambiente inseguro</h3><p>Falta de EPI, risco à saúde ou à integridade que a empresa ignora.</p></div>
+          <div class="card"><div class="icon">ICO</div><h3>Redução de salário ou de comissões</h3><p>Mudanças unilaterais que diminuem o que você recebe.</p></div>
+          <div class="card"><div class="icon">ICO</div><h3>Trabalho sem registro correto</h3><p>Parte do salário "por fora", carteira com data ou valor errado.</p></div>
+        </div>
+      </div>
+      <div class="center" style="margin-top:20px">
+        <p><strong>Você não precisa aceitar isso calado, e também não precisa sair de mãos vazias.</strong></p>
+        <a class="btn" href="#b14">Quero saber se o meu caso se encaixa</a>
       </div>
     </div>
-    <div class="note">As respostas de "carteira assinada" e "situação atual" servem para priorizar leads (ex.: saiu há mais de 2 anos = fora do prazo). Enviar lead para CRM/planilha e disparar evento de conversão.</div>
+    <div class="note">Ícones ICO-01 a ICO-08: dinheiro com relógio, cofre/FGTS, balão de fala, relógio, setas cruzadas, capacete/alerta, seta para baixo, carteira de trabalho.</div>
   </section>
 
-  <!-- 14 FOOTER -->
-  <footer class="block alt">
-    <div class="label">14 · Rodapé</div>
-    <div class="grid g3">
-      <div><div class="logo" style="margin-bottom:10px">LOGO</div><p class="muted">[Nome do Escritório] Advocacia Trabalhista<br>[Nome do advogado(a)] | OAB/[UF] [número]</p></div>
-      <div><p class="muted">[Endereço completo]<br>Telefone / WhatsApp: [número]<br>E-mail: [e-mail]</p></div>
-      <div><p class="muted">Política de Privacidade<br>Termos de Uso</p></div>
+  <!-- ================= 04 FAIXA DE COPY ================= -->
+  <section class="block" id="b04">
+    <div class="bhead"><span class="num">04</span><span class="name">Faixa de virada (bloco só de copy)</span>
+      <span class="types"><span class="tag t-copy">Só copy</span></span></div>
+    <div class="spec"><b>Layout:</b> 1 coluna centralizada, largura máx. 800px · <b>Fundo:</b> cor de marca escura, sem imagem · <b>Tipografia:</b> frase grande (32 a 40px)</div>
+    <div class="bbody dark">
+      <div class="el copy center"><span class="tag t-copy">Copy · frase de impacto + apoio</span>
+        <p class="manifesto mx">Pedir demissão é exatamente o que a empresa espera que você faça.</p>
+        <p class="muted mx">Assim ela não paga o aviso prévio, não libera o seu FGTS e não arca com a multa de 40%. Quando a culpa é da empresa, a conta também deve ser dela.</p>
+      </div>
     </div>
-    <p class="muted" style="border-top:1px solid var(--line); padding-top:12px; margin-top:12px">As informações deste site têm caráter exclusivamente informativo e não substituem a análise individual de um advogado. Não há garantia de resultado em processos judiciais.</p>
-  </footer>
+    <div class="note">Respiro visual entre as dores e a explicação. Sem botão, sem imagem: só texto, para dar peso à mensagem.</div>
+  </section>
 
-  <p class="muted center" style="font-size:13px; padding-bottom:100px">Elemento fixo: botão flutuante de WhatsApp (canto inferior direito), com balão após alguns segundos.<br>Mensagem pré-preenchida: "Olá, vim pelo site e gostaria de entender se tenho direito à rescisão indireta."</p>
+  <!-- ================= 05 O QUE É + PRAZO ================= -->
+  <section class="block" id="b05">
+    <div class="bhead"><span class="num">05</span><span class="name">O que é rescisão indireta + prazo</span>
+      <span class="types"><span class="tag t-copy">Copy</span><span class="tag t-ui">Box de destaque</span><span class="tag t-chart">Infográfico</span></span></div>
+    <div class="spec"><b>Layout:</b> linha 1 com 2 colunas 60/40 (texto | box legal) · linha 2 com infográfico em largura total · <b>Fundo:</b> branco</div>
+    <div class="bbody">
+      <div class="grid g64 gap-l">
+        <div class="el copy"><span class="tag t-copy">Copy · H2 + 2 parágrafos</span>
+          <h2>Rescisão indireta é a "justa causa" aplicada pelo trabalhador contra a empresa</h2>
+          <p class="muted">Quando o funcionário comete uma falta grave, a empresa pode demiti-lo por justa causa. A lei também funciona no sentido contrário: quando é a <strong>empresa</strong> que descumpre suas obrigações de forma grave, o trabalhador pode pedir na Justiça do Trabalho o fim do contrato por culpa do empregador.</p>
+          <p class="muted" style="margin:0">Na prática, o contrato se encerra como se você tivesse sido <strong>demitido sem justa causa</strong>. A diferença é que quem deu motivo foi a empresa.</p>
+        </div>
+        <div class="el" style="align-self:center"><span class="tag t-ui">Box de destaque</span>
+          <div class="card" style="border-width:2px">
+            <div class="icon">ICO</div>
+            <div class="eyebrow">Previsão legal</div>
+            <h3 style="font-size:20px">Artigo 483 da CLT</h3>
+            <p>Consolidação das Leis do Trabalho</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="el chart" style="margin-top:20px"><span class="tag t-chart">Infográfico · GRF-01 · linha do tempo do prazo</span>
+        <p style="margin-bottom:12px"><strong>Atenção ao prazo:</strong> <span class="muted">você tem até 2 anos após o fim do contrato para entrar com a ação e pode cobrar valores dos últimos 5 anos trabalhados.</span></p>
+        <svg class="chart" viewBox="0 0 900 130" role="img" aria-label="Linha do tempo: últimos 5 anos cobráveis antes do fim do contrato e 2 anos de prazo depois">
+          <rect x="40" y="46" width="560" height="26" rx="4" fill="#d6d6d1" stroke="#9a9a95"/>
+          <text x="320" y="64" text-anchor="middle" font-size="14" fill="#1f1f1f" font-weight="600">Últimos 5 anos: valores que podem ser cobrados</text>
+          <rect x="620" y="46" width="240" height="26" rx="4" fill="#fff" stroke="#3a3a3a" stroke-width="2" stroke-dasharray="6 4"/>
+          <text x="740" y="64" text-anchor="middle" font-size="14" fill="#1f1f1f" font-weight="600">2 anos para entrar com a ação</text>
+          <line x1="610" y1="30" x2="610" y2="92" stroke="#1f1f1f" stroke-width="3"/>
+          <circle cx="610" cy="30" r="6" fill="#1f1f1f"/>
+          <text x="610" y="18" text-anchor="middle" font-size="13" fill="#1f1f1f" font-weight="700">Fim do contrato</text>
+          <text x="40" y="112" font-size="12" fill="#6b6b6b">Início do período cobrável</text>
+          <text x="860" y="112" text-anchor="end" font-size="12" fill="#6b6b6b">Prazo final</text>
+        </svg>
+        <div class="asset">Construir em SVG/HTML (não usar imagem estática) · cores da marca · no mobile, girar para vertical</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 06 COMPARATIVO ================= -->
+  <section class="block" id="b06">
+    <div class="bhead"><span class="num">06</span><span class="name">Comparativo: pedir demissão x rescisão indireta</span>
+      <span class="types"><span class="tag t-copy">Copy</span><span class="tag t-chart">Gráfico</span><span class="tag t-tab">Tabela</span><span class="tag t-btn">Botão</span></span></div>
+    <div class="spec"><b>Layout:</b> título centralizado · 2 colunas 40/60 (gráfico | tabela) · nota + botão centralizados · <b>Fundo:</b> cinza claro</div>
+    <div class="bbody tint">
+      <div class="el copy center"><span class="tag t-copy">Copy · H2 + subtítulo</span>
+        <h2>Pedir demissão pode custar caro. Veja a diferença.</h2>
+        <p class="muted mx" style="margin:0">Muita gente pede as contas para se livrar do problema e deixa para trás direitos importantes.</p>
+      </div>
+
+      <div class="grid g46 gap-l" style="margin-top:16px">
+        <div class="el chart"><span class="tag t-chart">Gráfico · GRF-02 · barras horizontais</span>
+          <p class="small" style="margin-bottom:8px"><strong>Direitos que você leva na saída</strong></p>
+          <svg class="chart" viewBox="0 0 360 200" role="img" aria-label="Pedido de demissão: 3 de 7 direitos. Rescisão indireta: 7 de 7 direitos.">
+            <text x="0" y="30" font-size="13" fill="#1f1f1f">Pedido de demissão</text>
+            <rect x="0" y="40" width="340" height="30" rx="4" fill="#ecece8" stroke="#c4c4bf"/>
+            <rect x="0" y="40" width="146" height="30" rx="4" fill="#a8a8a3"/>
+            <text x="154" y="60" font-size="14" font-weight="700" fill="#1f1f1f">3 de 7</text>
+            <text x="0" y="112" font-size="13" fill="#1f1f1f" font-weight="700">Rescisão indireta</text>
+            <rect x="0" y="122" width="340" height="30" rx="4" fill="#2b2b2b"/>
+            <text x="330" y="142" text-anchor="end" font-size="14" font-weight="700" fill="#fff">7 de 7</text>
+            <text x="0" y="186" font-size="11" fill="#6b6b6b">Base: os 7 itens da tabela ao lado</text>
+          </svg>
+          <div class="asset">Animar a barra ao entrar na tela · barra da rescisão indireta na cor principal da marca</div>
+        </div>
+
+        <div class="el tab"><span class="tag t-tab">Tabela · 3 colunas</span>
+          <div class="scroll-x">
+            <table>
+              <thead><tr><th>Direito</th><th>Pedido de demissão</th><th>Rescisão indireta</th></tr></thead>
+              <tbody>
+                <tr><td>Saldo de salário</td><td>Sim</td><td class="yes">Sim</td></tr>
+                <tr><td>13º salário proporcional</td><td>Sim</td><td class="yes">Sim</td></tr>
+                <tr><td>Férias vencidas e proporcionais + 1/3</td><td>Sim</td><td class="yes">Sim</td></tr>
+                <tr><td>Aviso prévio indenizado</td><td class="no">Não (pode ter que cumprir ou ter descontado)</td><td class="yes">Sim</td></tr>
+                <tr><td>Saque do FGTS</td><td class="no">Não</td><td class="yes">Sim</td></tr>
+                <tr><td>Multa de 40% sobre o FGTS</td><td class="no">Não</td><td class="yes">Sim</td></tr>
+                <tr><td>Seguro-desemprego</td><td class="no">Não</td><td class="yes">Sim, se cumpridos os requisitos</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="el copy center" style="margin-top:16px"><span class="tag t-copy">Copy · nota + botão</span>
+        <p class="muted small mx">Além das verbas rescisórias, também podem ser cobrados valores que a empresa deixou de pagar durante o contrato, como horas extras, diferenças salariais e depósitos de FGTS em atraso, conforme o caso.</p>
+        <a class="btn" href="#b14">Antes de pedir demissão, fale com um advogado</a>
+      </div>
+    </div>
+    <div class="note">É o bloco que mais convence. No mobile: gráfico primeiro, tabela depois (com rolagem lateral ou virando 2 cards empilhados).</div>
+  </section>
+
+  <!-- ================= 07 DIREITOS ================= -->
+  <section class="block" id="b07">
+    <div class="bhead"><span class="num">07</span><span class="name">O que você pode receber</span>
+      <span class="types"><span class="tag t-copy">Copy</span><span class="tag t-ico">7 ícones</span><span class="tag t-chart">Gráfico</span></span></div>
+    <div class="spec"><b>Layout:</b> 2 colunas 60/40 (grid de ícones | gráfico FGTS) · <b>Fundo:</b> branco</div>
+    <div class="bbody">
+      <div class="el copy center"><span class="tag t-copy">Copy · H2</span>
+        <h2 style="margin:0">O que você pode receber com a rescisão indireta</h2>
+      </div>
+      <div class="grid g64 gap-l" style="margin-top:16px">
+        <div class="el ico"><span class="tag t-ico">Lista com ícones · 2 colunas</span>
+          <div class="grid g2">
+            <div class="card"><div class="icon">ICO</div><h3>Aviso prévio indenizado</h3></div>
+            <div class="card"><div class="icon">ICO</div><h3>Saque integral do FGTS</h3></div>
+            <div class="card"><div class="icon">ICO</div><h3>Multa de 40% sobre o FGTS</h3></div>
+            <div class="card"><div class="icon">ICO</div><h3>Seguro-desemprego</h3><p>Quando preenchidos os requisitos</p></div>
+            <div class="card"><div class="icon">ICO</div><h3>13º e férias proporcionais + 1/3</h3></div>
+            <div class="card"><div class="icon">ICO</div><h3>Valores atrasados ou nunca pagos</h3><p>Horas extras, diferenças salariais, FGTS em atraso</p></div>
+            <div class="card" style="grid-column:1/-1"><div class="icon">ICO</div><h3>Indenização por danos morais</h3><p>Quando houver assédio ou humilhação comprovados</p></div>
+          </div>
+        </div>
+        <div class="el chart" style="align-self:start"><span class="tag t-chart">Gráfico · GRF-03 · barra empilhada FGTS</span>
+          <p class="small" style="margin-bottom:8px"><strong>Como fica o seu FGTS</strong></p>
+          <svg class="chart" viewBox="0 0 320 250" role="img" aria-label="Pedido de demissão: saldo do FGTS fica retido. Rescisão indireta: saque do saldo mais multa de 40 por cento.">
+            <text x="60" y="236" text-anchor="middle" font-size="12" fill="#1f1f1f">Pedido de</text>
+            <text x="60" y="249" text-anchor="middle" font-size="12" fill="#1f1f1f">demissão</text>
+            <rect x="20" y="90" width="80" height="130" fill="#ecece8" stroke="#9a9a95" stroke-dasharray="5 4"/>
+            <text x="60" y="152" text-anchor="middle" font-size="12" fill="#6b6b6b">Saldo</text>
+            <text x="60" y="168" text-anchor="middle" font-size="12" fill="#6b6b6b">retido</text>
+
+            <text x="220" y="236" text-anchor="middle" font-size="12" fill="#1f1f1f" font-weight="700">Rescisão</text>
+            <text x="220" y="249" text-anchor="middle" font-size="12" fill="#1f1f1f" font-weight="700">indireta</text>
+            <rect x="180" y="90" width="80" height="130" fill="#6b6b6b"/>
+            <text x="220" y="152" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">Saque do</text>
+            <text x="220" y="168" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">saldo</text>
+            <rect x="180" y="38" width="80" height="52" fill="#2b2b2b"/>
+            <text x="220" y="68" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">+ 40%</text>
+            <text x="270" y="68" font-size="11" fill="#6b6b6b">multa</text>
+          </svg>
+          <p class="muted small" style="margin:6px 0 0">Na rescisão indireta você saca o saldo e recebe a multa de 40%. No pedido de demissão, o saldo fica retido.</p>
+          <div class="asset">Gráfico ilustrativo, sem valores em reais · construir em SVG</div>
+        </div>
+      </div>
+      <p class="muted small center" style="margin-top:14px">Cada caso é analisado individualmente. Os direitos dependem dos fatos e das provas disponíveis.</p>
+    </div>
+  </section>
+
+  <!-- ================= 08 COMO FUNCIONA ================= -->
+  <section class="block" id="b08">
+    <div class="bhead"><span class="num">08</span><span class="name">Como funciona (etapas)</span>
+      <span class="types"><span class="tag t-copy">Copy</span><span class="tag t-chart">Linha do tempo</span><span class="tag t-btn">Botão</span></span></div>
+    <div class="spec"><b>Layout:</b> título + linha do tempo horizontal com 5 pontos conectados · <b>Fundo:</b> cinza claro · <b>Mobile:</b> linha vertical à esquerda</div>
+    <div class="bbody tint">
+      <div class="el copy center"><span class="tag t-copy">Copy · H2</span>
+        <h2 style="margin:0">Como funciona, do primeiro contato até a decisão</h2>
+      </div>
+      <div class="el chart" style="margin-top:16px"><span class="tag t-chart">Infográfico · GRF-04 · linha do tempo em 5 etapas</span>
+        <svg class="chart" viewBox="0 0 1000 40" preserveAspectRatio="none" style="height:40px" aria-hidden="true">
+          <line x1="100" y1="20" x2="900" y2="20" stroke="#9a9a95" stroke-width="2" stroke-dasharray="6 5"/>
+          <circle cx="100" cy="20" r="16" fill="#2b2b2b"/><circle cx="300" cy="20" r="16" fill="#2b2b2b"/><circle cx="500" cy="20" r="16" fill="#2b2b2b"/><circle cx="700" cy="20" r="16" fill="#2b2b2b"/><circle cx="900" cy="20" r="16" fill="#2b2b2b"/>
+        </svg>
+        <div class="grid g5" style="margin-top:8px">
+          <div class="card"><div class="icon">1</div><h3>Conversa inicial</h3><p>Você conta o que está acontecendo, com sigilo. Entendemos o contexto e o tempo de empresa.</p></div>
+          <div class="card"><div class="icon">2</div><h3>Análise do caso e das provas</h3><p>Avaliamos documentos, mensagens, holerites e extrato do FGTS.</p></div>
+          <div class="card"><div class="icon">3</div><h3>Estratégia</h3><p>Explicamos os caminhos, os riscos e se é melhor continuar trabalhando ou se afastar.</p></div>
+          <div class="card"><div class="icon">4</div><h3>Ação na Justiça do Trabalho</h3><p>Ajuizamos a ação pedindo a rescisão indireta e as verbas devidas.</p></div>
+          <div class="card"><div class="icon">5</div><h3>Acompanhamento até o fim</h3><p>Você é informado de cada etapa: audiências, prazos e acordos.</p></div>
+        </div>
+        <div class="asset">Pontos numerados na cor da marca · linha animada preenchendo ao rolar</div>
+      </div>
+      <div class="center" style="margin-top:18px"><a class="btn" href="#b14">Começar pela conversa inicial</a></div>
+    </div>
+  </section>
+
+  <!-- ================= 09 PARA QUEM É ================= -->
+  <section class="block" id="b09">
+    <div class="bhead"><span class="num">09</span><span class="name">Para quem é (bloco só de copy, filtro de qualificação)</span>
+      <span class="types"><span class="tag t-copy">Só copy</span></span></div>
+    <div class="spec"><b>Layout:</b> título + 2 colunas 50/50 (é para você | talvez não seja) · <b>Fundo:</b> branco · <b>Sem imagem</b></div>
+    <div class="bbody">
+      <div class="el copy center"><span class="tag t-copy">Copy · H2</span>
+        <h2 style="margin:0">Este atendimento é para você se...</h2>
+      </div>
+      <div class="grid g2" style="margin-top:16px">
+        <div class="el copy" style="border-style:solid; border-width:2px; border-color:var(--accent)"><span class="tag t-copy">Copy · lista positiva (destaque)</span>
+          <h3 style="margin-bottom:8px">É para você</h3>
+          <ul class="check">
+            <li>Você trabalha (ou trabalhou até há pouco tempo) com carteira assinada.</li>
+            <li>A empresa descumpre obrigações de forma repetida, não foi um erro isolado.</li>
+            <li>Você quer sair, mas não quer abrir mão do que é seu por direito.</li>
+            <li>Você tem ou consegue reunir registros do problema (mensagens, e-mails, holerites, extrato do FGTS, testemunhas).</li>
+          </ul>
+        </div>
+        <div class="el copy"><span class="tag t-copy">Copy · lista negativa (tom neutro)</span>
+          <h3 style="margin-bottom:8px" class="muted">Talvez não seja o caminho</h3>
+          <ul class="check x muted">
+            <li>Você quer apenas trocar de emprego e não há falta grave da empresa.</li>
+            <li>O problema aconteceu uma única vez e já foi resolvido.</li>
+            <li>Você trabalha como PJ ou autônomo sem vínculo (pode haver outra discussão, como o reconhecimento de vínculo. Fale conosco para avaliar.)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="note">Bloco de qualificação: afasta curiosos e reforça autoridade. Só tipografia e listas, sem imagem.</div>
+  </section>
+
+  <!-- ================= 10 PROVAS ================= -->
+  <section class="block" id="b10">
+    <div class="bhead"><span class="num">10</span><span class="name">Provas: o que separar</span>
+      <span class="types"><span class="tag t-copy">Copy</span><span class="tag t-img">Imagem</span><span class="tag t-ui">Checklist</span><span class="tag t-ui">Alerta</span></span></div>
+    <div class="spec"><b>Layout:</b> 2 colunas 50/50 (imagem + alerta | título + checklist) · <b>Fundo:</b> cinza claro</div>
+    <div class="bbody tint">
+      <div class="grid g2 gap-l">
+        <div class="stack">
+          <div class="el img"><span class="tag t-img">Imagem · IMG-02</span>
+            <div class="ph" style="min-height:240px"><svg class="x"><use href="#x"/></svg>
+              <div class="cap"><b>Mesa com documentos</b>carteira de trabalho, holerites e celular com conversa aberta (sem dados legíveis)</div></div>
+            <div class="asset">Proporção 3:2 · mín. 1200x800px · foto real ou ilustração em linha</div>
+          </div>
+          <div class="el"><span class="tag t-ui">Box de alerta</span>
+            <div class="alert">Não peça demissão, não assine documentos e não faça acordos antes de conversar com um advogado. Uma decisão precipitada pode dificultar o reconhecimento dos seus direitos.</div>
+          </div>
+        </div>
+        <div class="el copy"><span class="tag t-copy">Copy · H2 + subtítulo + checklist</span>
+          <h2>Organize isto antes da nossa conversa</h2>
+          <p class="muted">Quanto mais registros, mais segura é a análise. Não se preocupe se não tiver tudo.</p>
+          <ul class="check">
+            <li>Carteira de trabalho (física ou digital)</li>
+            <li>Últimos holerites</li>
+            <li>Extrato do FGTS (aplicativo FGTS)</li>
+            <li>Prints de conversas, e-mails e mensagens com gestores</li>
+            <li>Registros de ponto ou anotações da sua jornada</li>
+            <li>Nome de colegas que presenciaram os fatos</li>
+            <li>Atestados médicos, se houve impacto na sua saúde</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 11 SOBRE ================= -->
+  <section class="block" id="b11">
+    <div class="bhead"><span class="num">11</span><span class="name">Sobre o advogado / escritório</span>
+      <span class="types"><span class="tag t-img">Foto</span><span class="tag t-copy">Copy</span><span class="tag t-ico">3 ícones</span></span></div>
+    <div class="spec"><b>Layout:</b> 2 colunas 40/60 (foto | texto) · 3 mini cards abaixo do texto · <b>Fundo:</b> branco</div>
+    <div class="bbody">
+      <div class="grid g46 gap-l" style="align-items:center">
+        <div class="el img"><span class="tag t-img">Imagem · IMG-03</span>
+          <div class="ph" style="min-height:400px"><svg class="x"><use href="#x"/></svg>
+            <div class="cap"><b>Retrato profissional</b>advogado(a) no escritório, olhando para a câmera, luz natural</div></div>
+          <div class="asset">Proporção 4:5 · mín. 1000x1250px · foto própria (não usar banco de imagem)</div>
+        </div>
+        <div class="stack">
+          <div class="el copy"><span class="tag t-copy">Copy · eyebrow + nome + OAB + 2 parágrafos</span>
+            <div class="eyebrow">Quem vai cuidar do seu caso</div>
+            <h2 style="margin-bottom:2px">[Nome do advogado(a)]</h2>
+            <p class="muted small">OAB/[UF] [número]</p>
+            <p class="muted">Advogado(a) trabalhista com atuação dedicada à defesa de trabalhadores. [X] anos acompanhando pessoas que chegaram ao limite com a empresa e precisavam de uma saída segura.</p>
+            <p class="muted" style="margin:0">Nosso trabalho começa ouvindo. Depois, explicamos o que a lei diz sobre a sua situação, com honestidade sobre as possibilidades e os riscos, para que você tome a decisão com informação, e não no impulso.</p>
+          </div>
+          <div class="el ico"><span class="tag t-ico">Mini cards · ícone + título + 1 linha</span>
+            <div class="grid g3">
+              <div class="card"><div class="icon">ICO</div><h3>Atuação focada</h3><p>Direito do Trabalho para o trabalhador.</p></div>
+              <div class="card"><div class="icon">ICO</div><h3>Transparência</h3><p>Você sabe em que fase está o seu processo.</p></div>
+              <div class="card"><div class="icon">ICO</div><h3>Atendimento humano</h3><p>Sem robôs, sem fila.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 12 DIFERENCIAIS ================= -->
+  <section class="block" id="b12">
+    <div class="bhead"><span class="num">12</span><span class="name">Diferenciais de atendimento</span>
+      <span class="types"><span class="tag t-copy">Copy</span><span class="tag t-ico">4 ícones</span></span></div>
+    <div class="spec"><b>Layout:</b> título + 4 colunas (ícone + título + texto) · <b>Fundo:</b> cor de marca escura · <b>Mobile:</b> 2x2 ou 1 coluna</div>
+    <div class="bbody dark">
+      <div class="el copy center"><span class="tag t-copy">Copy · H2</span>
+        <h2 style="margin:0">Um processo trabalhista não precisa ser um peso a mais na sua vida</h2>
+      </div>
+      <div class="el ico" style="margin-top:16px"><span class="tag t-ico">4 colunas · ícone + título + texto</span>
+        <div class="grid g4">
+          <div><div class="icon">ICO</div><h3>Sigilo total</h3><p class="muted small">Sua empresa não é comunicada sobre o contato com o escritório.</p></div>
+          <div><div class="icon">ICO</div><h3>100% online</h3><p class="muted small">Reuniões por vídeo e assinatura digital, de qualquer cidade.</p></div>
+          <div><div class="icon">ICO</div><h3>Linguagem clara</h3><p class="muted small">Explicamos cada passo sem juridiquês.</p></div>
+          <div><div class="icon">ICO</div><h3>Contato direto</h3><p class="muted small">Canal de WhatsApp para acompanhar o andamento.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="note">Ícones: cadeado, notebook com vídeo, balão de fala, WhatsApp/telefone.</div>
+  </section>
+
+  <!-- ================= 13 FAQ ================= -->
+  <section class="block" id="b13">
+    <div class="bhead"><span class="num">13</span><span class="name">Dúvidas frequentes</span>
+      <span class="types"><span class="tag t-copy">Copy</span><span class="tag t-ui">Acordeão</span></span></div>
+    <div class="spec"><b>Layout:</b> título + acordeão em 1 coluna (máx. 820px) · 1ª pergunta aberta · <b>Fundo:</b> branco · <b>SEO:</b> schema FAQPage</div>
+    <div class="bbody">
+      <div class="el copy center"><span class="tag t-copy">Copy · H2</span>
+        <h2 style="margin:0">Perguntas que recebemos todos os dias</h2>
+      </div>
+      <div class="el mx" style="margin-top:16px; max-width:860px"><span class="tag t-ui">Acordeão · 8 itens</span>
+        <details open><summary>Preciso continuar trabalhando enquanto o processo corre?</summary><p>Depende da situação. Em algumas hipóteses previstas na lei, é possível continuar trabalhando até a decisão. Em outras, especialmente quando há risco à saúde ou assédio, pode ser recomendado se afastar. Essa decisão deve ser tomada com orientação jurídica.</p></details>
+        <details><summary>A empresa vai saber que procurei um advogado?</summary><p>Não. A conversa com o escritório é sigilosa. A empresa só toma conhecimento quando a ação é ajuizada.</p></details>
+        <details><summary>Posso ser demitido por justa causa por entrar com a ação?</summary><p>Entrar com uma ação trabalhista é um direito e não é motivo para justa causa. Se houver retaliação, isso também pode ser levado ao processo.</p></details>
+        <details><summary>E se o juiz não reconhecer a rescisão indireta?</summary><p>Existe esse risco, e por isso a análise prévia das provas é tão importante. Se a rescisão indireta não for reconhecida, o contrato pode ser considerado encerrado a pedido do trabalhador. Explicamos esse cenário com clareza antes de qualquer decisão.</p></details>
+        <details><summary>Quanto tempo demora?</summary><p>O prazo varia conforme a região e a complexidade do caso. Em muitas situações, a primeira audiência já abre espaço para acordo.</p></details>
+        <details><summary>Já saí da empresa. Ainda posso cobrar meus direitos?</summary><p>Sim. Você tem até 2 anos após o fim do contrato para entrar com a ação, podendo cobrar valores dos últimos 5 anos. Se você pediu demissão por causa das faltas da empresa, vale conversar para avaliar o caso.</p></details>
+        <details><summary>Como funcionam os honorários?</summary><p>As condições são explicadas com transparência na primeira conversa, antes de qualquer contratação.</p></details>
+        <details><summary>Não moro na mesma cidade do escritório. Posso ser atendido?</summary><p>Sim. O atendimento é online e os processos trabalhistas tramitam de forma eletrônica.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 14 CTA FINAL ================= -->
+  <section class="block" id="b14">
+    <div class="bhead"><span class="num">14</span><span class="name">CTA final + formulário qualificador</span>
+      <span class="types"><span class="tag t-copy">Copy</span><span class="tag t-form">Formulário</span><span class="tag t-btn">2 botões</span></span></div>
+    <div class="spec"><b>Layout:</b> 2 colunas 40/60 (copy + WhatsApp | formulário) · <b>Fundo:</b> cor de marca escura · <b>Envio:</b> CRM ou planilha + evento de conversão</div>
+    <div class="bbody dark">
+      <div class="grid g46 gap-l">
+        <div class="el copy" style="align-self:start"><span class="tag t-copy">Copy · H2 + texto + botão secundário</span>
+          <h2 style="font-size:30px">Você não precisa decidir sozinho</h2>
+          <p class="muted">Conte o que está acontecendo. Vamos analisar a sua situação e dizer, com honestidade, se a rescisão indireta é o melhor caminho para você.</p>
+          <p class="muted" style="margin-top:20px">Prefere conversar agora?</p>
+          <a class="btn" href="#">Chamar no WhatsApp</a>
+        </div>
+        <div class="el form"><span class="tag t-form">Formulário · 9 campos</span>
+          <div class="form">
+            <div class="field">Nome</div>
+            <div class="grid g2" style="gap:10px"><div class="field">WhatsApp</div><div class="field">Cidade / Estado</div></div>
+            <div class="flabel">Você tem carteira assinada?</div>
+            <div class="chips"><span class="chip">Sim</span><span class="chip">Não</span><span class="chip">Tenho, mas parte é "por fora"</span></div>
+            <div class="flabel">Situação atual</div>
+            <div class="chips"><span class="chip">Ainda trabalho na empresa</span><span class="chip">Saí há menos de 2 anos</span><span class="chip">Saí há mais de 2 anos</span></div>
+            <div class="flabel">Tempo de empresa</div>
+            <div class="chips"><span class="chip">Menos de 1 ano</span><span class="chip">1 a 3 anos</span><span class="chip">3 a 5 anos</span><span class="chip">Mais de 5 anos</span></div>
+            <div class="flabel">Principal problema (pode marcar mais de um)</div>
+            <div class="chips"><span class="chip">Salário atrasado</span><span class="chip">FGTS não depositado</span><span class="chip">Assédio moral</span><span class="chip">Horas extras</span><span class="chip">Desvio de função</span><span class="chip">Ambiente inseguro</span><span class="chip">Outro</span></div>
+            <div class="field tall">Conte brevemente o que está acontecendo (opcional)</div>
+            <div class="small" style="color:#bdbdbd">[ ] Concordo com o uso dos meus dados para retorno do contato, conforme a Política de Privacidade.</div>
+            <a class="btn" href="#" style="justify-content:center">Enviar para análise</a>
+            <div class="small" style="color:#bdbdbd">Seus dados são tratados com sigilo. Retornamos em até [X] horas úteis.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note">As perguntas sobre carteira assinada e situação atual servem para priorizar contatos. Quem saiu há mais de 2 anos, por exemplo, já passou do prazo. Campos de escolha como botões (chips), não como listas suspensas, para facilitar no celular.</div>
+  </section>
+
+  <!-- ================= 15 RODAPÉ ================= -->
+  <section class="block" id="b15">
+    <div class="bhead"><span class="num">15</span><span class="name">Rodapé</span>
+      <span class="types"><span class="tag t-img">Logo</span><span class="tag t-copy">Copy</span></span></div>
+    <div class="spec"><b>Layout:</b> 3 colunas (identificação | contato | links) + faixa de aviso legal · <b>Fundo:</b> cinza claro</div>
+    <div class="bbody tint">
+      <div class="grid g3">
+        <div><div class="ph logo" style="margin-bottom:10px"><svg class="x"><use href="#x"/></svg><span class="tag t-img" style="position:relative">LOGO</span></div><p class="muted small">[Nome do Escritório] Advocacia Trabalhista<br>[Nome do advogado(a)] | OAB/[UF] [número]</p></div>
+        <div><p class="muted small">[Endereço completo]<br>Telefone / WhatsApp: [número]<br>E-mail: [e-mail]</p></div>
+        <div><p class="muted small">Política de Privacidade<br>Termos de Uso</p></div>
+      </div>
+      <div class="el copy" style="margin-top:14px"><span class="tag t-copy">Copy · aviso legal</span>
+        <p class="muted small" style="margin:0">As informações deste site têm caráter exclusivamente informativo e não substituem a análise individual de um advogado. Não há garantia de resultado em processos judiciais.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ASSETS ================= -->
+  <section class="block assets">
+    <div class="bhead"><span class="num">&#10003;</span><span class="name">Lista de elementos a produzir</span></div>
+    <div class="bbody">
+      <div class="scroll-x">
+        <table>
+          <thead><tr><th>ID</th><th>Tipo</th><th>Bloco</th><th>Descrição</th><th>Formato</th></tr></thead>
+          <tbody>
+            <tr><td>IMG-00</td><td><span class="tag t-img">Imagem</span></td><td>01, 15</td><td>Logo do escritório (versão clara e escura)</td><td>SVG</td></tr>
+            <tr><td>IMG-01</td><td><span class="tag t-img">Imagem</span></td><td>02</td><td>Foto principal do hero: advogado(a) ou trabalhador(a) em contexto real</td><td>4:5 · WebP</td></tr>
+            <tr><td>IMG-02</td><td><span class="tag t-img">Imagem</span></td><td>10</td><td>Mesa com documentos trabalhistas</td><td>3:2 · WebP</td></tr>
+            <tr><td>IMG-03</td><td><span class="tag t-img">Imagem</span></td><td>11</td><td>Retrato profissional do advogado(a)</td><td>4:5 · WebP</td></tr>
+            <tr><td>GRF-01</td><td><span class="tag t-chart">Infográfico</span></td><td>05</td><td>Linha do tempo do prazo (5 anos cobráveis, fim do contrato, 2 anos para agir)</td><td>SVG/HTML</td></tr>
+            <tr><td>GRF-02</td><td><span class="tag t-chart">Gráfico</span></td><td>06</td><td>Barras: direitos na saída (3 de 7 x 7 de 7)</td><td>SVG/HTML animado</td></tr>
+            <tr><td>GRF-03</td><td><span class="tag t-chart">Gráfico</span></td><td>07</td><td>Barra empilhada do FGTS (saldo + multa de 40%)</td><td>SVG/HTML</td></tr>
+            <tr><td>GRF-04</td><td><span class="tag t-chart">Infográfico</span></td><td>08</td><td>Linha do tempo das 5 etapas do atendimento</td><td>SVG/HTML</td></tr>
+            <tr><td>ICO-01 a 08</td><td><span class="tag t-ico">Ícones</span></td><td>03</td><td>Ícones das 8 dores</td><td>SVG linha</td></tr>
+            <tr><td>ICO-09 a 15</td><td><span class="tag t-ico">Ícones</span></td><td>07</td><td>Ícones dos direitos</td><td>SVG linha</td></tr>
+            <tr><td>ICO-16 a 25</td><td><span class="tag t-ico">Ícones</span></td><td>02, 05, 11, 12</td><td>Selos, box legal, mini cards e diferenciais</td><td>SVG linha</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted small" style="margin-top:12px">Usar uma única família de ícones (mesma espessura de traço) em toda a página. Gráficos sem valores em reais e sem estatísticas de resultado, para seguir as regras de publicidade da OAB.</p>
+    </div>
+  </section>
+
 </div>
 
 <div class="float">
-  <div class="bubble">Está passando por problemas no trabalho? Fale com um advogado.</div>
-  <div class="wa">WA</div>
+  <div class="bubble"><span class="tag t-ui">WhatsApp flutuante</span><br>Está passando por problemas no trabalho? Fale com um advogado.</div>
+  <div class="wa">WHATS<br>APP</div>
 </div>
 
 </body>
